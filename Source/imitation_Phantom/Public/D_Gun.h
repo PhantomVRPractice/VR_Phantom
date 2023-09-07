@@ -23,4 +23,9 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+		UPROPERTY(EditAnywhere, Category="MySetting")
+	class UBoxComponent* boxComp;
+
+	UPROPERTY(EditAnywhere, Category="MySetting")
+	class UStaticMeshComponent* nesg;
 };

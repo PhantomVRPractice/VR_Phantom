@@ -23,11 +23,7 @@ void AD_Gun::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
-	UPROPERTY(EditAnywhere, Category="MySetting")
-	class UBoxComponent* boxComp;
 
-	UPROPERTY(EditAnywhere, Category="MySetting")
-	class UStaticMeshComponent* nesg
 
 }
 
