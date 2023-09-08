@@ -12,11 +12,15 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "MoveComponent.h"
 #include "NiagaraComponent.h"
+#include "Components/CapsuleComponent.h"
 
 AVRCharacter::AVRCharacter()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
+	RootComponent= GetCapsuleComponent();
+	boatMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Boat Mesh"));
+	boatMesh->SetupAttachment(RootComponent);
 	hmdCam = CreateDefaultSubobject<UCameraComponent>(TEXT("HMD Camera"));
 	hmdCam->SetupAttachment(RootComponent);
 
@@ -60,6 +64,8 @@ AVRCharacter::AVRCharacter()
 	bUseControllerRotationPitch = true;
 	GetCharacterMovement()->bOrientRotationToMovement = false;
 	GetCharacterMovement()->bUseControllerDesiredRotation = false;
+	GetCharacterMovement()->Deactivate();
+	
 
 	// 컴포넌트 패턴
 	moveComp = CreateDefaultSubobject<UMoveComponent>(TEXT("Move Component"));

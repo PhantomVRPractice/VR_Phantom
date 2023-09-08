@@ -74,9 +74,8 @@ void UMoveComponent::Move(const FInputActionValue& value)
 
 	FVector forwardVec = FRotationMatrix(player->pc->GetControlRotation()).GetUnitAxis(EAxis::X);
 	FVector rightVec = FRotationMatrix(player->pc->GetControlRotation()).GetUnitAxis(EAxis::Y);
-
-	player->AddMovementInput(forwardVec, controllerInput.X);
-	player->AddMovementInput(rightVec, controllerInput.Y);
+	player->SetActorLocation(player->GetActorLocation()+forwardVec* controllerInput.X);
+	player->SetActorLocation(player->GetActorLocation() + rightVec * controllerInput.Y);
 }
 
 void UMoveComponent::Rotate(const FInputActionValue& value)

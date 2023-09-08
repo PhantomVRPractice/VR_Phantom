@@ -24,6 +24,9 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	UPROPERTY(EditAnywhere, Category="MySettings|Components")
+	class UStaticMeshComponent* boatMesh;
+
+	UPROPERTY(EditAnywhere, Category="MySettings|Components")
 	class UCameraComponent* hmdCam;
 
 	UPROPERTY(EditAnywhere, Category="MySettings|Components")
