@@ -14,7 +14,7 @@ AEnemy::AEnemy()
 	PrimaryActorTick.bCanEverTick = true;
 
 	// Mesh วาด็
-	ConstructorHelpers::FObjectFinder<USkeletalMesh> TempMesh(TEXT(""));
+	ConstructorHelpers::FObjectFinder<USkeletalMesh> TempMesh(TEXT("/Script/Engine.SkeletalMesh'/Game/DKW/Enemy/Asset01/Ch15_nonPBR.Ch15_nonPBR'"));
 
 	if (TempMesh.Succeeded()) {
 		GetMesh()->SetSkeletalMesh(TempMesh.Object);
