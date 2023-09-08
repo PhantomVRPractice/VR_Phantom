@@ -11,6 +11,8 @@
 #include "Components/CapsuleComponent.h"
 #include "NiagaraDataInterfaceArrayFunctionLibrary.h"
 #include "NiagaraComponent.h"
+#include "VRPawn.h"
+#include <Camera/CameraComponent.h>
 
 
 UMoveComponent::UMoveComponent()
@@ -24,7 +26,7 @@ void UMoveComponent::BeginPlay()
 {
 	Super::BeginPlay();
 
-	player = GetOwner<AVRCharacter>();
+	player = GetOwner<AVRPawn>();
 
 	//FTimerHandle massTimer;
 	/*GetWorld()->GetTimerManager().SetTimerForNextTick(FTimerDelegate::CreateLambda([&]() {
@@ -54,7 +56,7 @@ void UMoveComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 
 	// 반사 벡터 그리기
 	//FVector shoot = FRotationMatrix(player->leftMotionController->GetComponentRotation()).GetUnitAxis(EAxis::X);
-	DrawReflectionVector(FVector::ForwardVector, 1000);
+	//DrawReflectionVector(FVector::ForwardVector, 1000);
 }
 
 void UMoveComponent::SetupPlayerInputComponent(class UEnhancedInputComponent* enhancedInputComponent, TArray<class UInputAction*> inputActions)
@@ -72,10 +74,10 @@ void UMoveComponent::Move(const FInputActionValue& value)
 	FVector2D controllerInput = value.Get<FVector2D>();
 	player->leftLog->SetText(FText::FromString(FString::Printf(TEXT("x: %.2f\r\ny: %.2f"), controllerInput.X, controllerInput.Y)));
 
-	FVector forwardVec = FRotationMatrix(player->pc->GetControlRotation()).GetUnitAxis(EAxis::X);
-	FVector rightVec = FRotationMatrix(player->pc->GetControlRotation()).GetUnitAxis(EAxis::Y);
-	player->SetActorLocation(player->GetActorLocation()+forwardVec* controllerInput.X);
-	player->SetActorLocation(player->GetActorLocation() + rightVec * controllerInput.Y);
+	FVector forwardVec = player->boatMesh->GetRightVector();
+	//FVector rightVec = FRotationMatrix(player->pc->GetControlRotation()).GetUnitAxis(EAxis::X);
+	player->boatMesh->AddForce(-forwardVec* controllerInput.X*30000);
+	//player->SetActorLocation(player->GetActorLocation() + rightVec * controllerInput.Y*20);
 }
 
 void UMoveComponent::Rotate(const FInputActionValue& value)
@@ -87,7 +89,10 @@ void UMoveComponent::Rotate(const FInputActionValue& value)
 	if (player->pc != nullptr)
 	{
 		player->pc->AddYawInput(rightConInput.X);
-		player->pc->AddPitchInput(rightConInput.Y);
+		//player->pc->AddPitchInput(rightConInput.Y);
+		FRotator hmdRot=player->hmdCam->GetRelativeRotation();
+		hmdRot.Pitch-=rightConInput.Y;
+		player->hmdCam->SetRelativeRotation(hmdRot);
 	}
 }
 
@@ -131,7 +136,7 @@ void UMoveComponent::LeftTriggerUp()
 
 void UMoveComponent::DrawTrajectory(FVector dir, float power, float mass)
 {
-	linePositions.Empty();
+	/*linePositions.Empty();
 
 	UWorld* world = GetWorld();
 	FVector startLoc = player->leftMotionController->GetComponentLocation();
@@ -154,14 +159,14 @@ void UMoveComponent::DrawTrajectory(FVector dir, float power, float mass)
 		}
 
 		linePositions.Add(endLoc);
-	}
+	}*/
 
 	/*for (int i = 0; i < linePositions.Num() - 1; i++)
 	{
 		DrawDebugLine(world, linePositions[i], linePositions[i + 1], FColor::Red, false, 0, 0, 2);
 	}*/
 
-	UNiagaraDataInterfaceArrayFunctionLibrary::SetNiagaraArrayVector(player->lineFx, FName("PointArray"), linePositions);
+	//UNiagaraDataInterfaceArrayFunctionLibrary::SetNiagaraArrayVector(player->lineFx, FName("PointArray"), linePositions);
 
 	// 바닥 링 표시
 

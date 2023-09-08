@@ -42,7 +42,7 @@ public:
 
 private:
 
-	class AVRCharacter* player;
+	class AVRPawn* player;
 	bool bIsShowLine = false;
 	TArray<FVector> linePositions;
 	//class AFloorIndicatorActor* indicatorActor;
