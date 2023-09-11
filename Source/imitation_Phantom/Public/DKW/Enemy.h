@@ -27,8 +27,18 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 public:
-UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY()
+	class AVRCharacter* target;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UEnemyFSM* FSM;
 
-	
+	UPROPERTY(VisibleAnywhere, Category = "MySettings")
+	class USkeletalMeshComponent* gunMeshComp;
+
+	// ÃÑ¾Ë
+	TSubclassOf<class AEnemyBullet> bulletFactory;
+
+	void Fire();
+	void SearchPlayer();
 };
