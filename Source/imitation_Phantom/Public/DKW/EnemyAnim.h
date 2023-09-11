@@ -31,14 +31,20 @@ public:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category="FSM")
 	bool bDamage = false;
 
-	// 피격 몽타주 처리함수 선언
+	// 피격 몽타주 처리함수
 	UFUNCTION(BlueprintImplementableEvent, Category="FSM")
 	void PlayDamageAnim(FName sectionName);
+
+	// 찾는 애니메이션 처리함수
+	UFUNCTION(BlueprintImplementableEvent, Category="FSM")
+	void PlaySearchAnim(FName sectionName);
 	
 	// DieEndNoti 이벤트가 들어오면 그때서야 DieState 가 동작하도록 하고싶다.
 	UFUNCTION()
 	void AnimNotify_DieEndNoti();
 
 	// DieState 실행해도 되는지 여부
+	// SearchState 실행해도 되는지 여부
 	bool isDiePlaying = false;
+	bool isSearchPlaying = false;
 };
