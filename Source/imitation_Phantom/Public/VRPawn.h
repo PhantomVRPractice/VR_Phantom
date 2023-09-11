@@ -29,6 +29,11 @@ public:
 	class UStaticMeshComponent* boatMesh;
 
 	UPROPERTY(EditAnywhere, Category="MySettings|Components")
+	class USceneComponent* NoScene;
+
+
+
+	UPROPERTY(EditAnywhere, Category="MySettings|Components")
 	class UCameraComponent* hmdCam;
 
 	UPROPERTY(EditAnywhere, Category="MySettings|Components")
@@ -73,4 +78,8 @@ public:
 
 	class APlayerController* pc;
 	class ABallActor* ball;
+
+	//PKMWrite
+	UPROPERTY(EditDefaultsOnly, Category = "MySettings|Components")
+	TSubclassOf<class APickUpNo> NoActor;
 };
