@@ -52,60 +52,79 @@ void UGrabComponent::GrabObject()
 {
 #pragma region LineTrace Types
 	// 1. Line Trace를 이용했을 때
-	/*FHitResult hitInfo;
-	FVector startLoc = player->rightMotionController->GetComponentLocation();
-	FVector endLoc = startLoc + player->rightMotionController->GetUpVector() * -50.0f;
+		/*FHitResult hitInfo;
+		FVector startLoc = player->rightMotionController->GetComponentLocation();
+		FVector endLoc = startLoc + player->rightMotionController->GetUpVector() * -50.0f;
 
-	if (GetWorld()->LineTraceSingleByProfile(hitInfo, startLoc, endLoc, FName("PickUp")))
-	{
-		APickUpActor* pickObject = Cast<APickUpActor>(hitInfo.GetActor());
-		if (pickObject != nullptr)
+		if (GetWorld()->LineTraceSingleByProfile(hitInfo, startLoc, endLoc, FName("PickUp")))
 		{
-			pickObject->Grabbed(player->rightHand);
-			grabbedObject=pickObject;
-		}
+			APickUpActor* pickObject = Cast<APickUpActor>(hitInfo.GetActor());
+			if (pickObject != nullptr)
+			{
+				pickObject->Grabbed(player->rightHand);
+			}
 
-		player->rightLog->SetText(FText::FromString(FString::Printf(TEXT("Grab object: %s"), *hitInfo.GetActor()->GetName())));
-		UE_LOG(LogTemp, Warning, TEXT("Grab object: %s"), *hitInfo.GetActor()->GetName());
-	}
-	else
-	{
-		player->rightLog->SetText(FText::FromString(FString::Printf(TEXT("No Hit"))));
-		UE_LOG(LogTemp, Warning, TEXT("No Hit"));
-	}*/
+			player->rightLog->SetText(FText::FromString(FString::Printf(TEXT("Grab object: %s"), *hitInfo.GetActor()->GetName())));
+			UE_LOG(LogTemp, Warning, TEXT("Grab object: %s"), *hitInfo.GetActor()->GetName());
+		}
+		else
+		{
+			player->rightLog->SetText(FText::FromString(FString::Printf(TEXT("No Hit"))));
+			UE_LOG(LogTemp, Warning, TEXT("No Hit"));
+		}*/
 
 #pragma endregion
 
-	// 2. Sweep 방식을 사용할 때
-	FHitResult hitInfo;
+		// 2. Sweep 방식을 사용할 때
+		//FHitResult hitInfo;
+		//FVector startLoc = player->rightHand->GetComponentLocation();
+
+		//if (GetWorld()->SweepSingleByProfile(hitInfo, startLoc, startLoc, FQuat::Identity, FName("PickUp"), FCollisionShape::MakeSphere(20)))
+		//{
+		//	if (APickUpActor* pickObject = Cast<APickUpActor>(hitInfo.GetActor()))
+		//	{
+		//		pickObject->Grabbed(player->rightHand);
+		//	}
+		//}
+
+		// 3. Overlap 방식을 사용할 때
+	TArray<FOverlapResult> hitInfos;
 	FVector startLoc = player->rightHand->GetComponentLocation();
 
-	if (GetWorld()->SweepSingleByProfile(hitInfo, startLoc, startLoc, FQuat::Identity, FName("PickUp"), FCollisionShape::MakeSphere(20)))
+	if (GetWorld()->OverlapMultiByProfile(hitInfos, startLoc, FQuat::Identity, FName("PickUp"), FCollisionShape::MakeSphere(20)))
 	{
-		if (APickUpActor* pickObject = Cast<APickUpActor>(hitInfo.GetActor()))
+		for (const FOverlapResult& hitInfo : hitInfos)
 		{
-			pickObject->Grabbed(player->rightHand);
-			grabbedObject=pickObject;
-			prevLoc=player->rightMotionController->GetComponentLocation();
-			prevRot=player->rightMotionController->GetComponentQuat();
+			if (APickUpActor* pickObj = Cast<APickUpActor>(hitInfo.GetActor()))
+			{
+				pickObj->Grabbed(player->rightHand);
+				grabbedObject = pickObj;
+				player->pc->PlayHapticEffect(grab_Haptic, EControllerHand::Right, 1.0f, false);
+
+				break;
+			}
 		}
 	}
-	
+
+	DrawDebugSphere(GetWorld(), startLoc, 20, 30, FColor::Green, false, 1.0f);
 }
 
 void UGrabComponent::ReleaseObject()
 {
-	if (grabbedObject!=nullptr)
+	if (grabbedObject != nullptr)
 	{
+		// 물체를 손에서 분리하고, 물리 능력을 활성화한다.
 		grabbedObject->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
-		grabbedObject->boxComp->SetSimulatePhysics(true);
+		grabbedObject->meshComp->SetSimulatePhysics(true);
 
+		// 물체의 던지는 방향에 따른 힘(선형, 회전력)을 가한다.
 		if (!deltaLoc.IsNearlyZero())
 		{
-			grabbedObject->boxComp->AddImpulse(deltaLoc.GetSafeNormal()*throwPower);
+			grabbedObject->meshComp->AddImpulse(deltaLoc.GetSafeNormal() * throwPower);
+			grabbedObject->meshComp->AddTorqueInRadians(deltaRot.GetRotationAxis() * rotSpeed);
 		}
 
-		grabbedObject=nullptr;
+		grabbedObject = nullptr;
 	}
 }
 
