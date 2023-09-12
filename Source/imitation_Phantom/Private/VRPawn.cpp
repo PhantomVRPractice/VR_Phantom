@@ -12,10 +12,11 @@
 #include "EnhancedInputComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "MoveComponent.h"
+#include "GrabComponent.h"
 #include "NiagaraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "PickUpNo.h"
-
+#include "PickUpMyGun.h"
 // Sets default values
 AVRPawn::AVRPawn()
 {
@@ -66,9 +67,12 @@ AVRPawn::AVRPawn()
 	bUseControllerRotationPitch = true;
 	// 컴포넌트 패턴
 	moveComp = CreateDefaultSubobject<UMoveComponent>(TEXT("Move Component"));
+	grabComp = CreateDefaultSubobject<UGrabComponent>(TEXT("Grab Component"));
 
 	NoScene=CreateDefaultSubobject<USceneComponent>(TEXT("No Scene"));
 	NoScene->SetupAttachment(boatMesh);
+	GunScene = CreateDefaultSubobject<USceneComponent>(TEXT("Gun Scene"));
+	GunScene->SetupAttachment(boatMesh);
 }
 
 // Called when the game starts or when spawned
@@ -92,11 +96,16 @@ void AVRPawn::BeginPlay()
 			subSys->AddMappingContext(imc_VRmap, 0);
 		}
 	}
-	FActorSpawnParameters SpawnParam;
 	APickUpNo* PickUpNo=GetWorld()->SpawnActor<APickUpNo>(NoActor);
 	if (PickUpNo!=nullptr)
 	{
 		PickUpNo->AttachToComponent(NoScene,FAttachmentTransformRules::KeepRelativeTransform);
+	}
+	APickUpMyGun* PickUpGun = GetWorld()->SpawnActor<APickUpMyGun>(GunActor);
+	if (PickUpGun != nullptr)
+	{
+		UE_LOG(LogTemp,Warning,TEXT("Sorry"));
+		PickUpGun->AttachToComponent(GunScene, FAttachmentTransformRules::KeepRelativeTransform);
 	}
 }
 
@@ -115,7 +124,7 @@ void AVRPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	if (enhancedInputComponent != nullptr)
 	{
 		moveComp->SetupPlayerInputComponent(enhancedInputComponent, inputActions);
-
+		grabComp->SetupPlayerInputComponent(enhancedInputComponent, inputActions);
 	}
 }
 

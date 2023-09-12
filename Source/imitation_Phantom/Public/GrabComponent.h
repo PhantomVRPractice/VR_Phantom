@@ -33,6 +33,10 @@ public:
 	float rotSpeed=100.0f;
 	UPROPERTY(EditDefaultsOnly, Category=MySettings)
 	class UHapticFeedbackEffect_Base* grab_Haptic;
+
+	UPROPERTY(EditDefaultsOnly, Category=MySettings)
+	TSubclassOf<AActor> testActor;
+
 private:
 	class AVRPawn* player;
 	class APickUpActor* grabbedObject;
@@ -40,8 +44,9 @@ private:
 	FVector deltaLoc;
 	FQuat prevRot;
 	FQuat deltaRot;
-
+	bool bgrabNo = false;
 	void GrabObject();
 	void ReleaseObject();
 	void RightHandMove(const struct FInputActionValue& value);
+	class AActor* spawnTestActor;
 };
