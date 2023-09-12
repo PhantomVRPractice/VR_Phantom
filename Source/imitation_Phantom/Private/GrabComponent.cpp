@@ -7,6 +7,8 @@
 #include "PickUpActor.h"
 #include "Components/BoxComponent.h"
 #include <HeadMountedDisplay/Public/MotionControllerComponent.h>
+#include "PickUpNo.h"
+#include "PickUpMyGun.h"
 // Sets default values for this component's properties
 UGrabComponent::UGrabComponent()
 {
@@ -25,6 +27,7 @@ void UGrabComponent::BeginPlay()
 
 	// ...
 	player = GetOwner<AVRPawn>();
+	spawnTestActor = GetWorld()->SpawnActor<AActor>(testActor, FVector::ZeroVector, FRotator::ZeroRotator);
 }
 
 
@@ -35,17 +38,23 @@ void UGrabComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 	// ...
 	if (grabbedObject!=nullptr)
 	{
-		deltaLoc=player->rightMotionController->GetComponentLocation()-prevLoc;
-		prevLoc=player->rightMotionController->GetComponentLocation();
-
-		deltaRot= player->rightMotionController->GetComponentQuat()-prevRot.Inverse();
-		prevRot = player->rightMotionController->GetComponentQuat();
+		if (bgrabNo)
+		{//FVector shootDir = player->leftMotionController->GetComponentTransform().TransformVector(FVector::ForwardVector);
+			//왼손컨트롤러랑 오른손컨트롤러 중간에 위치하도록 드랩오브젝트가
+			FVector center = (player->rightMotionController->GetComponentLocation() + player->leftMotionController->GetComponentLocation())*0.5f;
+			grabbedObject->SetActorLocation(center);
+			//grabbedObject->SetActorRelativeLocation((player->rightMotionController->GetRelativeLocation()+ player->leftMotionController->GetRelativeLocation()/2));//엥..
+			//왼손컨트롤러랑 오른손컨트롤러에 맞게 로테이션이 돌아가도록
+			FVector minusvec= player->rightMotionController->GetComponentLocation() - player->leftMotionController->GetComponentLocation();
+			grabbedObject->SetActorRotation(minusvec.Rotation());
+		}
 	}
 }
 
 void UGrabComponent::SetupPlayerInputComponent(class UEnhancedInputComponent* enhancedInputComponent, TArray<class UInputAction*> inputActions)
 {
 	enhancedInputComponent->BindAction(inputActions[3], ETriggerEvent::Started, this, &UGrabComponent::GrabObject);
+	enhancedInputComponent->BindAction(inputActions[4], ETriggerEvent::Triggered, this, &UGrabComponent::RightHandMove);
 }
 
 void UGrabComponent::GrabObject()
@@ -88,43 +97,90 @@ void UGrabComponent::GrabObject()
 		//}
 
 		// 3. Overlap 방식을 사용할 때
-	TArray<FOverlapResult> hitInfos;
-	FVector startLoc = player->rightHand->GetComponentLocation();
-
-	if (GetWorld()->OverlapMultiByProfile(hitInfos, startLoc, FQuat::Identity, FName("PickUp"), FCollisionShape::MakeSphere(20)))
-	{
-		for (const FOverlapResult& hitInfo : hitInfos)
-		{
-			if (APickUpActor* pickObj = Cast<APickUpActor>(hitInfo.GetActor()))
+	if (grabbedObject!=nullptr)
+	{		//Release부분
+	
+			if (APickUpNo* GrabNo = Cast<APickUpNo>(grabbedObject))
 			{
-				pickObj->Grabbed(player->rightHand);
-				grabbedObject = pickObj;
-				player->pc->PlayHapticEffect(grab_Haptic, EControllerHand::Right, 1.0f, false);
+				bgrabNo = false;
+				GrabNo->AttachToComponent(player->NoScene, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+			}
+			if (APickUpMyGun* GrabGun = Cast<APickUpMyGun>(grabbedObject))
+			{	
+				grabbedObject->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+				GrabGun->AttachToComponent(player->GunScene, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+				UE_LOG(LogTemp, Warning, TEXT("GunReleasezz"));
+			}
+			//// 물체의 던지는 방향에 따른 힘(선형, 회전력)을 가한다.
+			//if (!deltaLoc.IsNearlyZero())
+			//{
+			//	grabbedObject->meshComp->AddImpulse(deltaLoc.GetSafeNormal() * throwPower);
+			//	grabbedObject->meshComp->AddTorqueInRadians(deltaRot.GetRotationAxis() * rotSpeed);
+			//}
+			grabbedObject = nullptr;
+	}
+	else
+	{
+		TArray<FOverlapResult> hitInfos;
+		FVector startLoc = player->rightHand->GetComponentLocation();
 
-				break;
+		if (GetWorld()->OverlapMultiByProfile(hitInfos, startLoc, FQuat::Identity, FName("PickUp"), FCollisionShape::MakeSphere(20)))
+		{
+			for (const FOverlapResult& hitInfo : hitInfos)
+			{
+				if (APickUpActor* pickObj = Cast<APickUpActor>(hitInfo.GetActor()))
+				{
+					if (APickUpNo* pickNo = Cast<APickUpNo>(pickObj))
+					{
+						pickNo->Grabbed(player->rightHand, 1);
+						bgrabNo = true;
+						grabbedObject = pickObj;
+						player->pc->PlayHapticEffect(grab_Haptic, EControllerHand::Right, 1.0f, false);
+						break;
+					}
+					if (APickUpMyGun* pickGun = Cast<APickUpMyGun>(pickObj))
+					{
+						pickGun->Grabbed(player->rightHand, 2);
+						grabbedObject = pickObj;
+						player->pc->PlayHapticEffect(grab_Haptic, EControllerHand::Right, 1.0f, false);
+						break;
+					}
+				}
 			}
 		}
+		DrawDebugSphere(GetWorld(), startLoc, 20, 30, FColor::Green, false, 1.0f);
 	}
-
-	DrawDebugSphere(GetWorld(), startLoc, 20, 30, FColor::Green, false, 1.0f);
 }
 
-void UGrabComponent::ReleaseObject()
+//void UGrabComponent::ReleaseObject()
+//{
+//	if (grabbedObject != nullptr)
+//	{
+//		// 물체를 손에서 분리하고, 물리 능력을 활성화한다.
+//		grabbedObject->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+//		if (APickUpNo* GrabNo = Cast<APickUpNo>(grabbedObject))
+//		{
+//			GrabNo->AttachToComponent(player->NoScene, FAttachmentTransformRules::KeepRelativeTransform);
+//		}
+//		if (APickUpMyGun* GrabGun = Cast<APickUpMyGun>(grabbedObject))
+//		{
+//			GrabGun->AttachToComponent(player->GunScene, FAttachmentTransformRules::KeepRelativeTransform);
+//		}
+//		//// 물체의 던지는 방향에 따른 힘(선형, 회전력)을 가한다.
+//		//if (!deltaLoc.IsNearlyZero())
+//		//{
+//		//	grabbedObject->meshComp->AddImpulse(deltaLoc.GetSafeNormal() * throwPower);
+//		//	grabbedObject->meshComp->AddTorqueInRadians(deltaRot.GetRotationAxis() * rotSpeed);
+//		//}
+//
+//		grabbedObject = nullptr;
+//	}
+//}
+
+
+void UGrabComponent::RightHandMove(const FInputActionValue& value)
 {
-	if (grabbedObject != nullptr)
-	{
-		// 물체를 손에서 분리하고, 물리 능력을 활성화한다.
-		grabbedObject->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
-		grabbedObject->meshComp->SetSimulatePhysics(true);
-
-		// 물체의 던지는 방향에 따른 힘(선형, 회전력)을 가한다.
-		if (!deltaLoc.IsNearlyZero())
-		{
-			grabbedObject->meshComp->AddImpulse(deltaLoc.GetSafeNormal() * throwPower);
-			grabbedObject->meshComp->AddTorqueInRadians(deltaRot.GetRotationAxis() * rotSpeed);
-		}
-
-		grabbedObject = nullptr;
-	}
+	FVector direction = value.Get<FVector>();
+	player->rightMotionController->SetRelativeLocation(player->rightMotionController->GetRelativeLocation() + direction.GetSafeNormal());
 }
 

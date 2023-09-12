@@ -14,8 +14,8 @@ APickUpActor::APickUpActor()
 	SetRootComponent(meshComp);
 	meshComp->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
 	meshComp->SetCollisionProfileName(FName("PickUp"));
-	meshComp->SetSimulatePhysics(true);
-	meshComp->SetEnableGravity(true);
+	meshComp->SetSimulatePhysics(false);
+	meshComp->SetEnableGravity(false);
 }
 
 void APickUpActor::BeginPlay()
@@ -30,11 +30,22 @@ void APickUpActor::Tick(float DeltaTime)
 
 }
 
-void APickUpActor::Grabbed(USkeletalMeshComponent* handMesh)
+void APickUpActor::Grabbed(USkeletalMeshComponent* handMesh, int32 What)
 {
-	meshComp->SetSimulatePhysics(false);
-	//AttachToComponent(handMesh, FAttachmentTransformRules::KeepWorldTransform);
-	AttachToComponent(handMesh, FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("GrabPoint"));
+	if (What==1)
+	{
+		meshComp->SetSimulatePhysics(false);
+		//AttachToComponent(handMesh, FAttachmentTransformRules::KeepWorldTransform);
+		DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		//SetActorRelativeLocation(FVector(0, 0, 100))
+	}
+	else
+	{
+		meshComp->SetSimulatePhysics(false);
+		//AttachToComponent(handMesh, FAttachmentTransformRules::KeepWorldTransform);
+		DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+		AttachToComponent(handMesh, FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName("GrabPoint"));
+	}
 	//SetActorRelativeLocation(FVector(0, 0, 100))
 }
 

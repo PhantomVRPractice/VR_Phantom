@@ -31,6 +31,9 @@ public:
 	UPROPERTY(EditAnywhere, Category="MySettings|Components")
 	class USceneComponent* NoScene;
 
+	UPROPERTY(EditAnywhere, Category="MySettings|Components")
+	class USceneComponent* GunScene;
+
 
 
 	UPROPERTY(EditAnywhere, Category="MySettings|Components")
@@ -61,6 +64,9 @@ public:
 	class UMoveComponent* moveComp;
 
 	UPROPERTY(EditDefaultsOnly, Category = "MySettings|Components")
+	class UGrabComponent* grabComp;
+
+	UPROPERTY(EditDefaultsOnly, Category = "MySettings|Components")
 	class UNiagaraComponent* lineFx;
 
 
@@ -82,4 +88,7 @@ public:
 	//PKMWrite
 	UPROPERTY(EditDefaultsOnly, Category = "MySettings|Components")
 	TSubclassOf<class APickUpNo> NoActor;
+
+	UPROPERTY(EditDefaultsOnly, Category = "MySettings|Components")
+	TSubclassOf<class APickUpMyGun> GunActor;
 };

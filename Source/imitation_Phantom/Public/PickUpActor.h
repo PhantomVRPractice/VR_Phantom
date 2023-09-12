@@ -30,5 +30,5 @@ public:
 	class UStaticMeshComponent* meshComp;
 
 	UFUNCTION()
-	void Grabbed(class USkeletalMeshComponent* handMesh);
+	void Grabbed(class USkeletalMeshComponent* handMesh,int32 What);
 };
