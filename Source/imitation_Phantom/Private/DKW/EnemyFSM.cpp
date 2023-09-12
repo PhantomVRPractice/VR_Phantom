@@ -317,16 +317,23 @@ void UEnemyFSM::AttackState()
 
 void UEnemyFSM::DamageState()
 {
+	// 일정시간동안 Damage animation 을 재생할 시간을 준다
+	// 일정시간이 지나면 탐색으로 넘어간다
+	//currentTime += GetWorld()->DeltaTimeSeconds;
+	//if(currentTime > )
+
+#pragma region Old
 	// 1. 시간이 흘렀으니까
-	currentTime += GetWorld()->DeltaTimeSeconds;
 	// 2. 경과시간이 대기시간을 초과했으니까
+	// 3. 상태를 대기로 전환하고 싶다.
+	currentTime += GetWorld()->DeltaTimeSeconds;
 	if (currentTime > damageDelayTime)
 	{
-		// 3. 상태를 대기로 전환하고 싶다.
 		mState = EEnemyState::Idle;
 		currentTime = 0;
 		anim->animState = mState;
 	}
+#pragma endregion	
 }
 
 
