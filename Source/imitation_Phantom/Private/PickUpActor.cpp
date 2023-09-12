@@ -10,19 +10,12 @@
 APickUpActor::APickUpActor()
 {
 	PrimaryActorTick.bCanEverTick = false;
-
-	boxComp = CreateDefaultSubobject<UBoxComponent>(TEXT("Box Component"));
-	SetRootComponent(boxComp);
-	boxComp->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
-	boxComp->SetCollisionProfileName(FName("PickUp"));
-	boxComp->SetBoxExtent(FVector(50));
-	boxComp->SetWorldScale3D(FVector(0.1f, 0.1f, 0.3f));
-	boxComp->SetSimulatePhysics(true);
-	boxComp->SetEnableGravity(true);
-
 	meshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Mesh Component"));
-	meshComp->SetupAttachment(RootComponent);
-	meshComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	SetRootComponent(meshComp);
+	meshComp->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	meshComp->SetCollisionProfileName(FName("PickUp"));
+	meshComp->SetSimulatePhysics(true);
+	meshComp->SetEnableGravity(true);
 }
 
 void APickUpActor::BeginPlay()

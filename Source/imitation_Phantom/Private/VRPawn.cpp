@@ -14,6 +14,7 @@
 #include "MoveComponent.h"
 #include "NiagaraComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "PickUpNo.h"
 
 // Sets default values
 AVRPawn::AVRPawn()
@@ -65,6 +66,9 @@ AVRPawn::AVRPawn()
 	bUseControllerRotationPitch = true;
 	// 컴포넌트 패턴
 	moveComp = CreateDefaultSubobject<UMoveComponent>(TEXT("Move Component"));
+
+	NoScene=CreateDefaultSubobject<USceneComponent>(TEXT("No Scene"));
+	NoScene->SetupAttachment(boatMesh);
 }
 
 // Called when the game starts or when spawned
@@ -87,6 +91,12 @@ void AVRPawn::BeginPlay()
 		{
 			subSys->AddMappingContext(imc_VRmap, 0);
 		}
+	}
+	FActorSpawnParameters SpawnParam;
+	APickUpNo* PickUpNo=GetWorld()->SpawnActor<APickUpNo>(NoActor);
+	if (PickUpNo!=nullptr)
+	{
+		PickUpNo->AttachToComponent(NoScene,FAttachmentTransformRules::KeepRelativeTransform);
 	}
 }
 

@@ -31,15 +31,17 @@ public:
 
 	UPROPERTY(EditDefaultsOnly,Category=MySettings)
 	float rotSpeed=100.0f;
-
+	UPROPERTY(EditDefaultsOnly, Category=MySettings)
+	class UHapticFeedbackEffect_Base* grab_Haptic;
 private:
 	class AVRPawn* player;
 	class APickUpActor* grabbedObject;
-	void GrabObject();
-	void ReleaseObject();
-
 	FVector prevLoc;
 	FVector deltaLoc;
 	FQuat prevRot;
 	FQuat deltaRot;
+
+	void GrabObject();
+	void ReleaseObject();
+	void RightHandMove(const struct FInputActionValue& value);
 };
