@@ -102,11 +102,13 @@ void UGrabComponent::GrabObject()
 	
 			if (APickUpNo* GrabNo = Cast<APickUpNo>(grabbedObject))
 			{
+				player->bIsNoMode=false;
 				bgrabNo = false;
 				GrabNo->AttachToComponent(player->NoScene, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 			}
 			if (APickUpMyGun* GrabGun = Cast<APickUpMyGun>(grabbedObject))
 			{	
+				player->bIsGunMode=false;
 				grabbedObject->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 				GrabGun->AttachToComponent(player->GunScene, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 				UE_LOG(LogTemp, Warning, TEXT("GunReleasezz"));
@@ -132,6 +134,7 @@ void UGrabComponent::GrabObject()
 				{
 					if (APickUpNo* pickNo = Cast<APickUpNo>(pickObj))
 					{
+						player->bIsNoMode=true;
 						pickNo->Grabbed(player->rightHand, 1);
 						bgrabNo = true;
 						grabbedObject = pickObj;
@@ -140,6 +143,7 @@ void UGrabComponent::GrabObject()
 					}
 					if (APickUpMyGun* pickGun = Cast<APickUpMyGun>(pickObj))
 					{
+						player->bIsGunMode=true;
 						pickGun->Grabbed(player->rightHand, 2);
 						grabbedObject = pickObj;
 						player->pc->PlayHapticEffect(grab_Haptic, EControllerHand::Right, 1.0f, false);

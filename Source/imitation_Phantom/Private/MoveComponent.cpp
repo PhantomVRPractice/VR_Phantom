@@ -98,6 +98,10 @@ void UMoveComponent::Rotate(const FInputActionValue& value)
 
 void UMoveComponent::LeftTriggerDown()
 {
+	if (!player->bIsGunMode&&!player->bIsNoMode)
+	{
+		//일반 오른쪽클릭 일때
+	}
 	////bIsShowLine = true;
 	//player->ball->meshComp->SetSimulatePhysics(true);
 	//player->ball->meshComp->SetEnableGravity(false);

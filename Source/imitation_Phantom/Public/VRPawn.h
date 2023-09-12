@@ -79,7 +79,10 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "MySettings|Movement")
 	bool bIsTesting = true;
 
-	
+	UPROPERTY(EditDefaultsOnly, Category = "MySettings|Inputs")
+	bool bIsGunMode = false;
+	UPROPERTY(EditDefaultsOnly, Category = "MySettings|Inputs")
+	bool bIsNoMode = false;
 
 
 	class APlayerController* pc;
