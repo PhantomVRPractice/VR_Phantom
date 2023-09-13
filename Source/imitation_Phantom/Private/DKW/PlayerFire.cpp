@@ -5,8 +5,12 @@
 #include <../Plugins/EnhancedInput/Source/EnhancedInput/Public/EnhancedInputComponent.h>
 #include "VRPawn.h"
 #include "../imitation_Phantom.h"
+#include "GrabComponent.h"
+#include <Kismet/GameplayStatics.h>
+#include "PickUpMyGun.h"
 
 #define LeftClick inputActions[2]
+
 
 // Sets default values for this component's properties
 UPlayerFire::UPlayerFire()
@@ -15,7 +19,12 @@ UPlayerFire::UPlayerFire()
 	// off to improve performance if you don't need them.
 	PrimaryComponentTick.bCanEverTick = true;
 
-	// ...
+	ConstructorHelpers::FClassFinder<ABullet>tempBullet(TEXT("/Script/Engine.Blueprint'/Game/DKW/PlayerFire/BP_Bullet.BP_Bullet_C'"));
+	if (tempBullet.Succeeded()) {
+		bulletFactory = tempBullet.Class;
+	}
+
+	
 }
 
 
@@ -23,9 +32,10 @@ UPlayerFire::UPlayerFire()
 void UPlayerFire::BeginPlay()
 {
 	Super::BeginPlay();
-
+	
 	// ...
 	player = GetOwner<AVRPawn>();
+	gun = Cast<APickUpMyGun>(UGameplayStatics::GetActorOfClass(GetWorld(), APickUpMyGun::StaticClass()));
 }
 
 
@@ -33,13 +43,12 @@ void UPlayerFire::BeginPlay()
 void UPlayerFire::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
-
-	PRINT2SCREEN(TEXT("FireComp"));
 }
 
 void UPlayerFire::SetupPlayerInputComponent(class UEnhancedInputComponent* enhancedInputComponent, TArray<class UInputAction*> inputActions)
 {
 	enhancedInputComponent->BindAction(LeftClick, ETriggerEvent::Started, this, &UPlayerFire::Fire);
+
 }
 
 void UPlayerFire::Fire()
@@ -47,5 +56,12 @@ void UPlayerFire::Fire()
 	// 총을 가지고 있지 않으면 
 	if(!player->bIsGunMode) return;
 	PRINT2SCREEN(TEXT("Player Fire !!"));
+	
+	// gun skeletal transform
+	FVector pos = gun->GunComp->GetSocketLocation("FirePosition");
+	FRotator rot = gun->GunComp->GetSocketRotation("FirePosition");
+	
+	// spawn
+	GetWorld()->SpawnActor<ABullet>(pos, rot);
 }
 

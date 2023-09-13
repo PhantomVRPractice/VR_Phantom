@@ -3,6 +3,7 @@
 
 #include "DKW/Bullet.h"
 #include <Components/SphereComponent.h>
+#include <GameFramework/ProjectileMovementComponent.h>
 
 // Sets default values
 ABullet::ABullet()
@@ -14,12 +15,25 @@ ABullet::ABullet()
 	collisionComp->SetCollisionProfileName(TEXT("BlockAll"));
 	collisionComp->SetSphereRadius(13);
 
-	RootComponent = collisionComp;
+	RootComponent = collisionComp; 
 
-	//bodyMeshComp = CreateDefaultSubobject<US>()
+	// Assign Mesh 
+	bodyMeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BodyMeshComp"));
+	bodyMeshComp->SetupAttachment(collisionComp);
+	bodyMeshComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	bodyMeshComp->SetRelativeScale3D(FVector(0.25f));
 
+	// Projectile Comp
+	movementComp = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("MovementComp"));
+	movementComp->SetUpdatedComponent(collisionComp);
 
+	//init Projectile
+	movementComp->InitialSpeed = 5000;
+	movementComp->MaxSpeed = 5000;
+	movementComp->bShouldBounce = true;
+	movementComp->Bounciness = 0.3f;
 
+	// life time
 	InitialLifeSpan = 2.0f;
 }
 
