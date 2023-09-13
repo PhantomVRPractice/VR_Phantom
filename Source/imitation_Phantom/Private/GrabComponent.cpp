@@ -104,6 +104,7 @@ void UGrabComponent::GrabObject()
 			{
 				player->bIsNoMode=false;
 				bgrabNo = false;
+				GrabNo->player = nullptr;
 				GrabNo->AttachToComponent(player->NoScene, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 			}
 			if (APickUpMyGun* GrabGun = Cast<APickUpMyGun>(grabbedObject))
@@ -136,6 +137,7 @@ void UGrabComponent::GrabObject()
 					{
 						player->bIsNoMode=true;
 						pickNo->Grabbed(player->rightHand, 1);
+						pickNo->player=player;
 						bgrabNo = true;
 						grabbedObject = pickObj;
 						player->pc->PlayHapticEffect(grab_Haptic, EControllerHand::Right, 1.0f, false);

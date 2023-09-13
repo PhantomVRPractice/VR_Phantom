@@ -67,6 +67,9 @@ public:
 	class UGrabComponent* grabComp;
 
 	UPROPERTY(EditDefaultsOnly, Category = "MySettings|Components")
+	class UNoComponent* NoComp;
+
+	UPROPERTY(EditDefaultsOnly, Category = "MySettings|Components")
 	class UNiagaraComponent* lineFx;
 
 

@@ -13,6 +13,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "MoveComponent.h"
 #include "GrabComponent.h"
+#include "NoComponent.h"
 #include "NiagaraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "PickUpNo.h"
@@ -68,7 +69,7 @@ AVRPawn::AVRPawn()
 	// 컴포넌트 패턴
 	moveComp = CreateDefaultSubobject<UMoveComponent>(TEXT("Move Component"));
 	grabComp = CreateDefaultSubobject<UGrabComponent>(TEXT("Grab Component"));
-
+	NoComp = CreateDefaultSubobject<UNoComponent>(TEXT("No Component"));
 	NoScene=CreateDefaultSubobject<USceneComponent>(TEXT("No Scene"));
 	NoScene->SetupAttachment(boatMesh);
 	GunScene = CreateDefaultSubobject<USceneComponent>(TEXT("Gun Scene"));
