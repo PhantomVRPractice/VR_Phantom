@@ -70,6 +70,9 @@ public:
 	class UNoComponent* NoComp;
 
 	UPROPERTY(EditDefaultsOnly, Category = "MySettings|Components")
+	class UPlayerFire* FireComp;
+
+	UPROPERTY(EditDefaultsOnly, Category = "MySettings|Components")
 	class UNiagaraComponent* lineFx;
 
 

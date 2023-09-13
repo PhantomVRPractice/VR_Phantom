@@ -4,6 +4,9 @@
 #include "DKW/PlayerFire.h"
 #include <../Plugins/EnhancedInput/Source/EnhancedInput/Public/EnhancedInputComponent.h>
 #include "VRPawn.h"
+#include "../imitation_Phantom.h"
+
+#define LeftClick inputActions[2]
 
 // Sets default values for this component's properties
 UPlayerFire::UPlayerFire()
@@ -31,24 +34,18 @@ void UPlayerFire::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// ...
+	PRINT2SCREEN(TEXT("FireComp"));
 }
 
 void UPlayerFire::SetupPlayerInputComponent(class UEnhancedInputComponent* enhancedInputComponent, TArray<class UInputAction*> inputActions)
 {
-	//enhancedInputComponent->BindAction(inputActions[0], ETriggerEvent::Triggered, this, &UMoveComponent::Move);
-	//enhancedInputComponent->BindAction(inputActions[0], ETriggerEvent::Completed, this, &UMoveComponent::Move);
-	//enhancedInputComponent->BindAction(inputActions[1], ETriggerEvent::Triggered, this, &UMoveComponent::Rotate);
-	//enhancedInputComponent->BindAction(inputActions[1], ETriggerEvent::Completed, this, &UMoveComponent::Rotate);
-	//enhancedInputComponent->BindAction(inputActions[2], ETriggerEvent::Started, this, &UPlayerFire::LeftTriggerDown);
-	//enhancedInputComponent->BindAction(inputActions[2], ETriggerEvent::Completed, this, &UMoveComponent::LeftTriggerUp);
+	enhancedInputComponent->BindAction(LeftClick, ETriggerEvent::Started, this, &UPlayerFire::Fire);
 }
 
 void UPlayerFire::Fire()
 {
 	// 총을 가지고 있지 않으면 
 	if(!player->bIsGunMode) return;
-
-	
+	PRINT2SCREEN(TEXT("Player Fire !!"));
 }
 

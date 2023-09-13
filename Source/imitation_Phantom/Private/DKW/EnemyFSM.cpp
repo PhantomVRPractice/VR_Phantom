@@ -57,9 +57,9 @@ void UEnemyFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 	}
 
 	// 현재 상태 출력
-	FString strState;
-	UEnum::GetValueAsString(mState, strState);
-	PRINT2SCREEN(TEXT("%s"), * strState);
+	/*FString strState;
+	UEnum::GetValueAsString(mState, strState);*/
+	//PRINT2SCREEN(TEXT("%s"), * strState);
 
 	// FSM 목차
 	switch (mState)

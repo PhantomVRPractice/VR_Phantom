@@ -18,6 +18,7 @@
 #include "Components/CapsuleComponent.h"
 #include "PickUpNo.h"
 #include "PickUpMyGun.h"
+#include "DKW/PlayerFire.h"
 // Sets default values
 AVRPawn::AVRPawn()
 {
@@ -70,6 +71,8 @@ AVRPawn::AVRPawn()
 	moveComp = CreateDefaultSubobject<UMoveComponent>(TEXT("Move Component"));
 	grabComp = CreateDefaultSubobject<UGrabComponent>(TEXT("Grab Component"));
 	NoComp = CreateDefaultSubobject<UNoComponent>(TEXT("No Component"));
+	FireComp = CreateDefaultSubobject<UPlayerFire>(TEXT("Fire Component"));
+
 	NoScene=CreateDefaultSubobject<USceneComponent>(TEXT("No Scene"));
 	NoScene->SetupAttachment(boatMesh);
 	GunScene = CreateDefaultSubobject<USceneComponent>(TEXT("Gun Scene"));
@@ -126,6 +129,7 @@ void AVRPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	{
 		moveComp->SetupPlayerInputComponent(enhancedInputComponent, inputActions);
 		grabComp->SetupPlayerInputComponent(enhancedInputComponent, inputActions);
+		FireComp->SetupPlayerInputComponent(enhancedInputComponent, inputActions);
 	}
 }
 
