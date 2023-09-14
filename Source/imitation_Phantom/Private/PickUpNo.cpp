@@ -65,7 +65,7 @@ void APickUpNo::Tick(float DeltaTime)
 					LeftVec.Z=0;
 					FVector direction= minusVec+LeftVec;
 					direction.Normalize();
-					player->boatMesh->AddForce(direction * VecPower *5000);
+					player->boatMesh->AddForce(direction * VecPower *3000);
 					//로테이션 돌리기
 					double DotP= FVector::DotProduct(minusVec, player->boatMesh->GetRightVector());
 					player->pc->AddYawInput((VecPower/30)*DotP);//-주기
@@ -85,9 +85,9 @@ void APickUpNo::Tick(float DeltaTime)
 					RightVec.Z = 0;
 					FVector direction = minusVec + RightVec;
 					direction.Normalize();
-					player->boatMesh->AddForce(direction * VecPower * 5000);
+					player->boatMesh->AddForce(direction * VecPower * 3000);
 					double DotP = FVector::DotProduct(minusVec, player->boatMesh->GetRightVector());
-					player->pc->AddYawInput((VecPower / 30) * DotP);//-주기
+					player->pc->AddYawInput(-(VecPower / 30) * DotP);//-주기
 				}
 			}
 		}

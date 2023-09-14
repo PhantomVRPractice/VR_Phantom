@@ -34,7 +34,8 @@ public:
 	UPROPERTY(EditAnywhere, Category="MySettings|Components")
 	class USceneComponent* GunScene;
 
-
+	UPROPERTY(EditAnywhere, Category="MySettings|Components")
+	class USceneComponent* MyAmmoScene;
 
 	UPROPERTY(EditAnywhere, Category="MySettings|Components")
 	class UCameraComponent* hmdCam;
@@ -100,4 +101,7 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = "MySettings|Components")
 	TSubclassOf<class APickUpMyGun> GunActor;
+
+	UPROPERTY(EditDefaultsOnly, Category = "MySettings|Components")
+	TSubclassOf<class APickUpAmmo> AmmoActor;
 };

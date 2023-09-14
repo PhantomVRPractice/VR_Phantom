@@ -40,13 +40,16 @@ public:
 private:
 	class AVRPawn* player;
 	class APickUpActor* grabbedObject;
+	class APickUpActor* leftgrabbedObject;
 	FVector prevLoc;
 	FVector deltaLoc;
 	FQuat prevRot;
 	FQuat deltaRot;
 	bool bgrabNo = false;
+	void LeftGrabObject();
 	void GrabObject();
-	void ReleaseObject();
+	void LeftReleaseObject();
 	void RightHandMove(const struct FInputActionValue& value);
+	void LeftHandMove(const struct FInputActionValue& value);
 	class AActor* spawnTestActor;
 };

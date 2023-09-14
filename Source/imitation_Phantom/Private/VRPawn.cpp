@@ -19,6 +19,7 @@
 #include "PickUpNo.h"
 #include "PickUpMyGun.h"
 #include "DKW/PlayerFire.h"
+#include "PickUpAmmo.h"
 // Sets default values
 AVRPawn::AVRPawn()
 {
@@ -77,6 +78,9 @@ AVRPawn::AVRPawn()
 	NoScene->SetupAttachment(boatMesh);
 	GunScene = CreateDefaultSubobject<USceneComponent>(TEXT("Gun Scene"));
 	GunScene->SetupAttachment(boatMesh);
+	MyAmmoScene = CreateDefaultSubobject<USceneComponent>(TEXT("MyAmmo Scene"));
+	MyAmmoScene->SetupAttachment(boatMesh);
+
 }
 
 // Called when the game starts or when spawned
@@ -103,13 +107,26 @@ void AVRPawn::BeginPlay()
 	APickUpNo* PickUpNo=GetWorld()->SpawnActor<APickUpNo>(NoActor);
 	if (PickUpNo!=nullptr)
 	{
-		PickUpNo->AttachToComponent(NoScene,FAttachmentTransformRules::KeepRelativeTransform);
+		PickUpNo->AttachToComponent(NoScene,FAttachmentTransformRules::SnapToTargetNotIncludingScale);
 	}
 	APickUpMyGun* PickUpGun = GetWorld()->SpawnActor<APickUpMyGun>(GunActor);
 	if (PickUpGun != nullptr)
 	{
-		UE_LOG(LogTemp,Warning,TEXT("Sorry"));
-		PickUpGun->AttachToComponent(GunScene, FAttachmentTransformRules::KeepRelativeTransform);
+		PickUpGun->AttachToComponent(GunScene, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+	}
+	APickUpAmmo* PickUpAmmo = GetWorld()->SpawnActor<APickUpAmmo>(AmmoActor);
+	if (PickUpAmmo != nullptr)
+	{
+		if (PickUpAmmo->AttachToComponent(MyAmmoScene, FAttachmentTransformRules::SnapToTargetNotIncludingScale))
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Sorry"));
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("Sorry2"));
+
+		}
+		
 	}
 }
 

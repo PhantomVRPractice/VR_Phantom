@@ -9,6 +9,7 @@
 #include <HeadMountedDisplay/Public/MotionControllerComponent.h>
 #include "PickUpNo.h"
 #include "PickUpMyGun.h"
+#include "PickUpAmmo.h"
 // Sets default values for this component's properties
 UGrabComponent::UGrabComponent()
 {
@@ -55,6 +56,33 @@ void UGrabComponent::SetupPlayerInputComponent(class UEnhancedInputComponent* en
 {
 	enhancedInputComponent->BindAction(inputActions[3], ETriggerEvent::Started, this, &UGrabComponent::GrabObject);
 	enhancedInputComponent->BindAction(inputActions[4], ETriggerEvent::Triggered, this, &UGrabComponent::RightHandMove);
+	enhancedInputComponent->BindAction(inputActions[7], ETriggerEvent::Started, this, &UGrabComponent::LeftGrabObject);
+	enhancedInputComponent->BindAction(inputActions[7], ETriggerEvent::Completed, this, &UGrabComponent::LeftReleaseObject);
+	enhancedInputComponent->BindAction(inputActions[9], ETriggerEvent::Triggered, this, &UGrabComponent::LeftHandMove);
+}
+
+void UGrabComponent::LeftGrabObject()
+{
+	TArray<FOverlapResult> hitInfos;
+	FVector startLoc = player->leftHand->GetComponentLocation();
+
+	if (GetWorld()->OverlapMultiByProfile(hitInfos, startLoc, FQuat::Identity, FName("PickUp"), FCollisionShape::MakeSphere(20)))
+	{
+		for (const FOverlapResult& hitInfo : hitInfos)
+		{
+			if (APickUpActor* pickObj = Cast<APickUpActor>(hitInfo.GetActor()))
+			{
+				if (APickUpAmmo* pickAmmo = Cast<APickUpAmmo>(pickObj))
+				{
+					pickAmmo->Grabbed(player->leftHand, 2);
+					leftgrabbedObject = pickObj;
+					player->pc->PlayHapticEffect(grab_Haptic, EControllerHand::Left, 1.0f, false);
+					break;
+				}
+			}
+		}
+	}
+	DrawDebugSphere(GetWorld(), startLoc, 20, 30, FColor::Green, false, 1.0f);
 }
 
 void UGrabComponent::GrabObject()
@@ -158,6 +186,20 @@ void UGrabComponent::GrabObject()
 	}
 }
 
+void UGrabComponent::LeftReleaseObject()
+{
+		if (leftgrabbedObject != nullptr)
+		{
+		// 물체를 손에서 분리하고, 물리 능력을 활성화한다.
+			leftgrabbedObject->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
+			if (APickUpAmmo* GrabAmmo = Cast<APickUpAmmo>(leftgrabbedObject))
+			{
+				GrabAmmo->AttachToComponent(player->MyAmmoScene, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+			}
+			leftgrabbedObject = nullptr;
+	}
+}
+
 //void UGrabComponent::ReleaseObject()
 //{
 //	if (grabbedObject != nullptr)
@@ -188,5 +230,11 @@ void UGrabComponent::RightHandMove(const FInputActionValue& value)
 {
 	FVector direction = value.Get<FVector>();
 	player->rightMotionController->SetRelativeLocation(player->rightMotionController->GetRelativeLocation() + direction.GetSafeNormal());
+}
+
+void UGrabComponent::LeftHandMove(const struct FInputActionValue& value)
+{
+	FVector direction = value.Get<FVector>();
+	player->leftMotionController->SetRelativeLocation(player->leftMotionController->GetRelativeLocation() + direction.GetSafeNormal());
 }
 
