@@ -49,6 +49,32 @@ void UGrabComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 			FVector minusvec= player->rightMotionController->GetComponentLocation() - player->leftMotionController->GetComponentLocation();
 			grabbedObject->SetActorRotation(minusvec.Rotation());
 		}
+		if (bgrabAmmo)
+		{	
+			FVector startLoc = player->leftHand->GetComponentLocation();
+			TArray<FOverlapResult> hitInfos;
+			if (GetWorld()->OverlapMultiByProfile(hitInfos, startLoc, FQuat::Identity, FName("PickUp"), FCollisionShape::MakeSphere(20)))
+			{
+				for (const FOverlapResult& hitInfo : hitInfos)
+				{
+					if (APickUpActor* pickObj = Cast<APickUpActor>(hitInfo.GetActor()))
+					{
+						if (APickUpMyGun* pickGun = Cast<APickUpMyGun>(pickObj))
+						{
+							APickUpAmmo* GrabAmmo = Cast<APickUpAmmo>(leftgrabbedObject);
+							if (GrabAmmo!=nullptr)
+							{
+								pickGun->SetAmmoCount(GrabAmmo->RemainAmmo);
+								UE_LOG(LogTemp, Warning, TEXT("%d"),pickGun->GetAmmoCount());
+								LeftReleaseObject();
+								player->pc->PlayHapticEffect(grab_Haptic, EControllerHand::Left, 1.0f, false);
+							}
+						}
+					}
+				}
+			}
+			DrawDebugSphere(GetWorld(), startLoc, 20, 30, FColor::Green, false, 1.0f);
+		}
 	}
 }
 
@@ -74,6 +100,7 @@ void UGrabComponent::LeftGrabObject()
 			{
 				if (APickUpAmmo* pickAmmo = Cast<APickUpAmmo>(pickObj))
 				{
+					bgrabAmmo=true;
 					pickAmmo->Grabbed(player->leftHand, 2);
 					leftgrabbedObject = pickObj;
 					player->pc->PlayHapticEffect(grab_Haptic, EControllerHand::Left, 1.0f, false);
@@ -191,6 +218,7 @@ void UGrabComponent::LeftReleaseObject()
 		if (leftgrabbedObject != nullptr)
 		{
 		// 물체를 손에서 분리하고, 물리 능력을 활성화한다.
+			bgrabAmmo=false;
 			leftgrabbedObject->DetachFromActor(FDetachmentTransformRules::KeepWorldTransform);
 			if (APickUpAmmo* GrabAmmo = Cast<APickUpAmmo>(leftgrabbedObject))
 			{

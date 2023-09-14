@@ -36,16 +36,17 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category=MySettings)
 	TSubclassOf<AActor> testActor;
+	class APickUpActor* grabbedObject;
+	class APickUpActor* leftgrabbedObject;
 
 private:
 	class AVRPawn* player;
-	class APickUpActor* grabbedObject;
-	class APickUpActor* leftgrabbedObject;
 	FVector prevLoc;
 	FVector deltaLoc;
 	FQuat prevRot;
 	FQuat deltaRot;
 	bool bgrabNo = false;
+	bool bgrabAmmo = false;
 	void LeftGrabObject();
 	void GrabObject();
 	void LeftReleaseObject();

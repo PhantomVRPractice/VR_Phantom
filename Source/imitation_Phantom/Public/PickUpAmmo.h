@@ -13,5 +13,7 @@ UCLASS()
 class IMITATION_PHANTOM_API APickUpAmmo : public APickUpActor
 {
 	GENERATED_BODY()
-	
+public:
+	UPROPERTY()
+	int32 RemainAmmo=30;
 };
