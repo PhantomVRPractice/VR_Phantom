@@ -27,8 +27,13 @@ public:
 	// Input Setting
 	void SetupPlayerInputComponent(class UEnhancedInputComponent* enhancedInputComponent, TArray<class UInputAction*> inputActions);
 
-	class AVRPawn* player;
+	UPROPERTY()
+	TSubclassOf<class ABullet> bulletFactory;
 
+	UPROPERTY()
+	class AVRPawn* player;
+	UPROPERTY()
+	class APickUpMyGun* gun; 
 	// Fire
 	void Fire();
 	
