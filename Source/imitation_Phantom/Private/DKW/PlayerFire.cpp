@@ -10,6 +10,7 @@
 #include "PickUpMyGun.h"
 
 #define LeftClick inputActions[2]
+#define RightClick inputActions[10]
 
 
 // Sets default values for this component's properties
@@ -48,7 +49,7 @@ void UPlayerFire::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 void UPlayerFire::SetupPlayerInputComponent(class UEnhancedInputComponent* enhancedInputComponent, TArray<class UInputAction*> inputActions)
 {
 	enhancedInputComponent->BindAction(LeftClick, ETriggerEvent::Started, this, &UPlayerFire::Fire);
-
+	enhancedInputComponent->BindAction(RightClick, ETriggerEvent::Started, this, &UPlayerFire::Fire);
 }
 
 void UPlayerFire::Fire()
@@ -62,6 +63,6 @@ void UPlayerFire::Fire()
 	FRotator rot = gun->GunComp->GetSocketRotation("FirePosition");
 	
 	// spawn
-	GetWorld()->SpawnActor<ABullet>(pos, rot);
+	GetWorld()->SpawnActor<ABullet>(bulletFactory ,pos, rot);
 }
 

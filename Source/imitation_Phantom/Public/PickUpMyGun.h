@@ -21,10 +21,7 @@ public:
 	UPROPERTY()
 	int32 ammo = 0;
 
-	UPROPERTY()
-	void SetAmmoCount(int32 ammoNum){ammo = ammoNum;}
-
-	UPROPERTY()
 	int32 GetAmmoCount(){return ammo;}
+	void SetAmmoCount(int32 ammoNum){ammo = ammoNum;}
 
 };

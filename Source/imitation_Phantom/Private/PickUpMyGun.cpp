@@ -10,3 +10,5 @@ APickUpMyGun::APickUpMyGun()
 	GunComp = CreateDefaultSubobject<USkeletalMeshComponent>("GunComp");
 	GunComp->SetupAttachment(RootComponent);
 }
+
+
