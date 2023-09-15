@@ -36,7 +36,7 @@ void UPlayerFire::BeginPlay()
 	
 	// ...
 	player = GetOwner<AVRPawn>();
-	gun = Cast<APickUpMyGun>(UGameplayStatics::GetActorOfClass(GetWorld(), APickUpMyGun::StaticClass()));
+	
 }
 
 
@@ -54,14 +54,19 @@ void UPlayerFire::SetupPlayerInputComponent(class UEnhancedInputComponent* enhan
 
 void UPlayerFire::Fire()
 {
+	PRINT2SCREEN(TEXT("Player Fire !!"));
 	// 총을 가지고 있지 않으면 
 	if(!player->bIsGunMode) return;
-	PRINT2SCREEN(TEXT("Player Fire !!"));
 	
+	//gun = Cast<APickUpMyGun>(UGameplayStatics::GetActorOfClass(GetWorld(), APickUpMyGun::StaticClass()));
+	gun = Cast<APickUpMyGun>(UGameplayStatics::GetActorOfClass(GetWorld(), APickUpMyGun::StaticClass()));
+	
+	if(!gun) return;
+
 	// gun skeletal transform
 	FVector pos = gun->GunComp->GetSocketLocation("FirePosition");
 	FRotator rot = gun->GunComp->GetSocketRotation("FirePosition");
-	
+
 	// spawn
 	GetWorld()->SpawnActor<ABullet>(bulletFactory ,pos, rot);
 }
