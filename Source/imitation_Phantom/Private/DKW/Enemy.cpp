@@ -10,6 +10,7 @@
 #include <GameFramework/CharacterMovementComponent.h>
 #include <Components/SceneComponent.h>
 #include "DKW/EnemyFSM.h"
+#include "VRPawn.h"
 
 // Sets default values
 AEnemy::AEnemy()
@@ -65,7 +66,7 @@ void AEnemy::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	target = Cast<AVRCharacter>(UGameplayStatics::GetActorOfClass(GetWorld(), AVRCharacter::StaticClass()));
+	target = Cast<AVRPawn>(UGameplayStatics::GetActorOfClass(GetWorld(), AVRPawn::StaticClass()));
 }
 
 // Called every frame
@@ -103,7 +104,9 @@ void AEnemy::Fire()
 	// FirePos 소켓의 위치를 가져온다
 	// FirePos 소켓에 Bullet 을 스폰한다
 	FTransform firePos = gunMeshComp->GetSocketTransform(TEXT("FirePosition"));
-	GetWorld()->SpawnActor<AEnemyBullet>(bulletFactory, firePos);
+	firePos.SetRotation((target->GetActorLocation() - firePos.GetLocation()).Rotation().Quaternion());
+	AEnemyBullet* EB=GetWorld()->SpawnActor<AEnemyBullet>(bulletFactory, firePos);
+	
 }
 
 void AEnemy::SearchPlayer()
@@ -115,11 +118,11 @@ void AEnemy::SearchPlayer()
 	USceneComponent* handLight = Cast<USceneComponent>(GetDefaultSubobjectByName(TEXT("HandLight")));
 	
 	if(!target){ 
-		PRINT2SCREEN(TEXT("noTarget"));
+		//PRINT2SCREEN(TEXT("noTarget"));
 		return; 
 	}
 	if(!handLight){
-		PRINT2SCREEN(TEXT("noHandLight"));
+		//PRINT2SCREEN(TEXT("noHandLight"));
 		return;
 	} 
 	FVector A = handLight->GetForwardVector();
@@ -129,12 +132,15 @@ void AEnemy::SearchPlayer()
 	float AngleRadians = FMath::Acos(AngleCosine);
 	float degreeOfPlayer = FMath::RadiansToDegrees(AngleRadians);
 
-	PRINT2SCREEN(TEXT("PlayerDegree : %f"), degreeOfPlayer);
+	//PRINT2SCREEN(TEXT("PlayerDegree : %f"), degreeOfPlayer);
 	
+	// 임시
+	FSM->mState = EEnemyState::Attack;
+
 	if (degreeOfPlayer < 180) {
 		// Enemy의 상태를 공격으로 변경
-		FSM->mState = EEnemyState::Attack;
 		// anim도 설정해주기
+		//FSM->mState = EEnemyState::Attack;
 
 
 		//// 어딘가에 숨어 있는가 판단한다

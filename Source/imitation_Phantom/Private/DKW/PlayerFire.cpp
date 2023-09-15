@@ -80,6 +80,10 @@ void UPlayerFire::Fire()
 	FRotator rot = gun->GunComp->GetSocketRotation("FirePosition");
 
 	// spawn
-	GetWorld()->SpawnActor<ABullet>(bulletFactory ,pos, rot);
+	if (gun->GetAmmoCount() - 1 >= 0) {
+		gun->SetAmmoCount(gun->GetAmmoCount() - 1);
+		PRINT2SCREEN(TEXT("Remain Ammo=%d"),gun->GetAmmoCount());
+		GetWorld()->SpawnActor<ABullet>(bulletFactory, pos, rot);
+	}
 }
 

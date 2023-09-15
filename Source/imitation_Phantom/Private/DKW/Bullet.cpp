@@ -40,7 +40,7 @@ ABullet::ABullet()
 	movementComp->MaxSpeed = 5000;
 	movementComp->bShouldBounce = true;
 	movementComp->Bounciness = 0.3f;
-
+	movementComp->ProjectileGravityScale=0;
 	// life time
 	InitialLifeSpan = 2.0f;
 }

@@ -12,6 +12,7 @@
 #include "../imitation_Phantom.h"
 #include <GameFramework/CharacterMovementComponent.h>
 #include <Kismet/KismetMathLibrary.h>
+#include "VRPawn.h"
 
 // Sets default values for this component's properties
 UEnemyFSM::UEnemyFSM()
@@ -30,7 +31,7 @@ void UEnemyFSM::BeginPlay()
 	// target
 	// me
 	// EnemyAnim
-	target = Cast<AVRCharacter>(UGameplayStatics::GetActorOfClass(GetWorld(), AVRCharacter::StaticClass()));
+	target = Cast<AVRPawn>(UGameplayStatics::GetActorOfClass(GetWorld(), AVRPawn::StaticClass()));
 	me	   = Cast<AEnemy>(GetOwner());
 	anim   = Cast<UEnemyAnim>(me->GetMesh()->GetAnimInstance());
 	
@@ -125,7 +126,7 @@ void UEnemyFSM::MoveState()
 {
 	if(!refPositions[curDestinationName])
 	{
-		PRINT2SCREEN(TEXT("No CurDestination Pos"));
+		//PRINT2SCREEN(TEXT("No CurDestination Pos"));
 		return;
 	}
 
@@ -139,17 +140,17 @@ void UEnemyFSM::MoveState()
 	// 타겟쪽으로이동할 수 있으면 거기로 간다
 	if (r.Result == ENavigationQueryResult::Success) {
 		isAlreadyGoal = ai->MoveToLocation(dest);
-		PRINT2SCREEN(TEXT("Enemy can reach to dest"));
+		//PRINT2SCREEN(TEXT("Enemy can reach to dest"));
 	}
 
 	// 도착했다면 목표지점에 따라서 다르게 행동
 	if (isAlreadyGoal == EPathFollowingRequestResult::AlreadyAtGoal) {
 		if (curDestinationName.Contains("SearchPos")) {
-			PRINT2SCREEN(TEXT("enemy is on SearchPos"));
+			//PRINT2SCREEN(TEXT("enemy is on SearchPos"));
 			mState = EEnemyState::Search;
 		}
 		else if(curDestinationName.Contains("EndPos")){
-			PRINT2SCREEN(TEXT("enemy is on EndPos"));
+			//PRINT2SCREEN(TEXT("enemy is on EndPos"));
 			mState = EEnemyState::Idle;
 			isEnemyActive = false;
 		}
@@ -205,7 +206,7 @@ void UEnemyFSM::SearchState()
 {
 	// 탐색지역을 향해 몸을 돌린다
 	if (!isTurningFinished) {
-		PRINT2SCREEN(TEXT("_Turning"));
+		//PRINT2SCREEN(TEXT("_Turning"));
 
 		FRotator curRot = me->GetActorRotation();
 		FRotator aimRot = refPositions[curDestinationName]->GetActorForwardVector().ToOrientationRotator();
@@ -227,7 +228,7 @@ void UEnemyFSM::SearchState()
 	// 찾는 모션을 한다
 	me->SearchPlayer();
 	anim->PlaySearchAnim("FindAnim");
-	PRINT2SCREEN(TEXT("_SearchingAnim"));
+	//PRINT2SCREEN(TEXT("_SearchingAnim"));
 
 	// 탐색시간동안 찾지 못한다면 돌아가는 모션
 	currentTime += GetWorld()->DeltaTimeSeconds;
@@ -288,7 +289,7 @@ void UEnemyFSM::AttackState()
 	if (currentTime > attackDelayTime)
 	{
 		currentTime = 0;
-		PRINT_LOG(TEXT("Attack!!!!!!!!!!!!!"));
+		//PRINT_LOG(TEXT("Attack!!!!!!!!!!!!!"));
 
 		me->Fire();
 		anim->bAttackPlay = true;

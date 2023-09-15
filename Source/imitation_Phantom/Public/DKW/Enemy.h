@@ -28,7 +28,7 @@ public:
 
 public:
 	UPROPERTY()
-	class AVRCharacter* target;
+	class AVRPawn* target;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UEnemyFSM* FSM;

@@ -23,5 +23,21 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	
+	UPROPERTY(VisibleAnywhere, Category = Movement)
+		class UProjectileMovementComponent* movementComp;
+
+	UPROPERTY(EditAnywhere, Category = Collision)
+		class USphereComponent* collisionComp;
+
+	UPROPERTY(EditAnywhere, Category = BodyMesh)
+		class UStaticMeshComponent* bodyMeshComp;
+
+	UFUNCTION()
+	void OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	UPROPERTY(EditAnywhere, Category = direction)
+	FVector direction;
+	UFUNCTION()
+	void setdirection(FVector vec);
+
 };

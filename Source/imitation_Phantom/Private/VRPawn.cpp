@@ -150,3 +150,15 @@ void AVRPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	}
 }
 
+void AVRPawn::Damaged(int32 value)
+{
+	if (hp-value > 0) {
+		hp-=value;
+		PRINT2SCREEN(TEXT("player hp: %d"), hp);
+	}
+	else {
+		hp=0;
+		//GetController()->UnPossess();
+	}
+}
+

@@ -104,4 +104,10 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = "MySettings|Components")
 	TSubclassOf<class APickUpAmmo> AmmoActor;
+
+	UPROPERTY(EditDefaultsOnly, Category = "MySettings|Components")
+	int32 hp=10;
+
+	UFUNCTION()
+	void Damaged(int32 value);
 };
