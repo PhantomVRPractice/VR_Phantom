@@ -4,6 +4,8 @@
 #include "DKW/Bullet.h"
 #include <Components/SphereComponent.h>
 #include <GameFramework/ProjectileMovementComponent.h>
+#include "../imitation_Phantom.h"
+#include "DKW/Enemy.h"
 
 // Sets default values
 ABullet::ABullet()
@@ -21,7 +23,13 @@ ABullet::ABullet()
 	bodyMeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BodyMeshComp"));
 	bodyMeshComp->SetupAttachment(collisionComp);
 	bodyMeshComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	bodyMeshComp->SetRelativeScale3D(FVector(0.25f));
+	bodyMeshComp->SetRelativeScale3D(FVector(0.15f));
+
+	ConstructorHelpers::FObjectFinder<UStaticMesh> tempBullet (TEXT("/Script/Engine.StaticMesh'/Engine/BasicShapes/Sphere.Sphere'"));
+	if (tempBullet.Succeeded()) {
+		bodyMeshComp->SetStaticMesh(tempBullet.Object);
+	}
+
 
 	// Projectile Comp
 	movementComp = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("MovementComp"));
@@ -41,7 +49,7 @@ ABullet::ABullet()
 void ABullet::BeginPlay()
 {
 	Super::BeginPlay();
-	
+	collisionComp->OnComponentBeginOverlap.AddDynamic(this, &ABullet::OnComponentBeginOverlap);
 }
 
 // Called every frame
@@ -49,5 +57,17 @@ void ABullet::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void ABullet::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	PRINT2SCREEN(TEXT("Bullet Collided"));
+
+	AEnemy* enemy = Cast<AEnemy>(OtherActor);
+
+	if (enemy) {
+		PRINT2SCREEN(TEXT("Enemy Collided"));
+		enemy->Destroy();
+	}
 }
 

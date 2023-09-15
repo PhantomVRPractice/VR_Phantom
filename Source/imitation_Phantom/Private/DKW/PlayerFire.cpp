@@ -59,12 +59,17 @@ void UPlayerFire::Fire()
 	if(!player->bIsGunMode) return;
 	
 	//gun = Cast<APickUpMyGun>(UGameplayStatics::GetActorOfClass(GetWorld(), APickUpMyGun::StaticClass()));
+	// 나중에 고치기 > graped 에서 가져오기
 	gun = Cast<APickUpMyGun>(UGameplayStatics::GetActorOfClass(GetWorld(), APickUpMyGun::StaticClass()));
 	
-	if(!gun) return;
+	if (!gun) {
+		PRINT2SCREEN(TEXT("No Gun Here !!"));
+	}
+	PRINT2SCREEN(TEXT("Spawn Spawn !!"));
 
 	// gun skeletal transform
-	FVector pos = gun->GunComp->GetSocketLocation("FirePosition");
+	// 소켓확인하기
+	FVector pos  = gun->GunComp->GetSocketLocation("FirePosition");
 	FRotator rot = gun->GunComp->GetSocketRotation("FirePosition");
 
 	// spawn
