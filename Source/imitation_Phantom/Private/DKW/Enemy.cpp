@@ -81,10 +81,27 @@ void AEnemy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
+void AEnemy::OnDamage()
+{
+	if (hp > 0) {
+		hp--;
+		PRINT2SCREEN(TEXT("Enemy Damage : %d"), hp);
+	}
+	else {
+		// animation 
+		// 줌음을 FSM에서 처리한다
+		// 죽음처리는 알파에 진행
+		// FSM->OnDamageProcess();
+
+		// 프로토에는 Destroy를 바로 여기서 한다
+		Destroy();
+	}
+}
+
 void AEnemy::Fire()
 {
 	// FirePos 소켓의 위치를 가져온다
-	// FirePos 소켓에 Bullet을 스폰한다
+	// FirePos 소켓에 Bullet 을 스폰한다
 	FTransform firePos = gunMeshComp->GetSocketTransform(TEXT("FirePosition"));
 	GetWorld()->SpawnActor<AEnemyBullet>(bulletFactory, firePos);
 }
@@ -114,24 +131,30 @@ void AEnemy::SearchPlayer()
 
 	PRINT2SCREEN(TEXT("PlayerDegree : %f"), degreeOfPlayer);
 	
-	if (degreeOfPlayer < 30) {
-		FVector startPos = handLight->GetComponentLocation();
-		FVector targetPos = target->GetActorLocation();
-		FVector endPos = startPos + 2*(targetPos - startPos);
+	if (degreeOfPlayer < 180) {
+		// Enemy의 상태를 공격으로 변경
+		FSM->mState = EEnemyState::Attack;
+		// anim도 설정해주기
 
-		FHitResult hitInfo;
-		FCollisionQueryParams params;
-		params.AddIgnoredActor(this);
 
-		bool bhit = GetWorld()->LineTraceSingleByChannel(hitInfo, startPos, endPos, ECC_Visibility, params);
+		//// 어딘가에 숨어 있는가 판단한다
+		//FVector startPos = handLight->GetComponentLocation();
+		//FVector targetPos = target->GetActorLocation();
+		//FVector endPos = startPos + 2*(targetPos - startPos);
 
-		if (bhit && hitInfo.GetActor() == target) {
-			PRINT2SCREEN(TEXT("RayHitPlayer"));
-			FSM->bIsFoundPlayer = true;
-		}
+		//FHitResult hitInfo;
+		//FCollisionQueryParams params;
+		//params.AddIgnoredActor(this);
+
+		//bool bhit = GetWorld()->LineTraceSingleByChannel(hitInfo, startPos, endPos, ECC_Visibility, params);
+
+		//if (bhit && hitInfo.GetActor() == target) {
+		//	PRINT2SCREEN(TEXT("RayHitPlayer"));
+		//	FSM->bIsFoundPlayer = true;
+		//}
 
 		//DrawDebugLine(GetWorld(), startPos, hitInfo.Location, FColor(255, 0, 0), true, -1, 0, 12.333);
-		DrawDebugLine(GetWorld(), startPos, endPos, FColor(255, 0, 0), true, -1, 0, 12.333);
+		//DrawDebugLine(GetWorld(), startPos, endPos, FColor(255, 0, 0), true, -1, 0, 12.333);
 	}
 
 	// https://en.wikipedia.org/wiki/Dot_product

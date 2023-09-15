@@ -24,8 +24,6 @@ UPlayerFire::UPlayerFire()
 	if (tempBullet.Succeeded()) {
 		bulletFactory = tempBullet.Class;
 	}
-
-	
 }
 
 
@@ -44,6 +42,15 @@ void UPlayerFire::BeginPlay()
 void UPlayerFire::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
+
+	FHitResult hitInfo;
+
+	// temp draw line func
+	gun = Cast<APickUpMyGun>(UGameplayStatics::GetActorOfClass(GetWorld(), APickUpMyGun::StaticClass()));
+	FVector pos = gun->GunComp->GetSocketLocation("FirePosition");
+
+	DrawDebugLine(GetWorld(), pos, pos + gun->GunComp->GetRightVector() * 1000, FColor::Red);
+	
 }
 
 void UPlayerFire::SetupPlayerInputComponent(class UEnhancedInputComponent* enhancedInputComponent, TArray<class UInputAction*> inputActions)

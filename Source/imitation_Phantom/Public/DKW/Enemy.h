@@ -39,6 +39,11 @@ public:
 	// ÃÑ¾Ë
 	TSubclassOf<class AEnemyBullet> bulletFactory;
 
+	// Hp
+	int hp = 5;
+	
+	void OnDamage();
+
 	void Fire();
 	void SearchPlayer();
 };

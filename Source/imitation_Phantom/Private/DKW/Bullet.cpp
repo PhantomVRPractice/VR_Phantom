@@ -14,7 +14,7 @@ ABullet::ABullet()
 	PrimaryActorTick.bCanEverTick = true;
 
 	collisionComp = CreateDefaultSubobject<USphereComponent>(TEXT("CollisionComp"));
-	collisionComp->SetCollisionProfileName(TEXT("BlockAll"));
+	collisionComp->SetCollisionProfileName(TEXT("PlayerBullet"));
 	collisionComp->SetSphereRadius(13);
 
 	RootComponent = collisionComp; 
@@ -67,6 +67,7 @@ void ABullet::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, 
 
 	if (enemy) {
 		PRINT2SCREEN(TEXT("Enemy Collided"));
+		//enemy->OnDamage();
 		enemy->Destroy();
 	}
 }
