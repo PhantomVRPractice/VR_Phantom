@@ -98,9 +98,9 @@ void UEnemyFSM::IdleState()
 		currentTime += GetWorld()->DeltaTimeSeconds;
 		if (currentTime > idleDelayTime)
 		{
+			UE_LOG(LogTemp, Warning, TEXT("%f"), currentTime);
 			mState = EEnemyState::Move;
 			currentTime = 0;
-
 			anim->animState = mState;
 			curDestinationName = "SearchPos";
 		}
@@ -126,33 +126,33 @@ void UEnemyFSM::MoveState()
 {
 	if(!refPositions[curDestinationName])
 	{
-		//PRINT2SCREEN(TEXT("No CurDestination Pos"));
+		PRINT2SCREEN(TEXT("No CurDestination Pos"));
+
+
 		return;
 	}
-
 	FVector dest = refPositions[curDestinationName]->GetActorLocation();
 
 	EPathFollowingRequestResult::Type isAlreadyGoal = EPathFollowingRequestResult::Failed;
 	
 	FPathFindingResult r;
 	FindPathByAI(dest, r);
-
 	// 타겟쪽으로이동할 수 있으면 거기로 간다
 	if (r.Result == ENavigationQueryResult::Success) {
 		isAlreadyGoal = ai->MoveToLocation(dest);
-		//PRINT2SCREEN(TEXT("Enemy can reach to dest"));
+		PRINT2SCREEN(TEXT("Enemy can reach to dest"));
 	}
 
 	// 도착했다면 목표지점에 따라서 다르게 행동
 	if (isAlreadyGoal == EPathFollowingRequestResult::AlreadyAtGoal) {
 		if (curDestinationName.Contains("SearchPos")) {
-			//PRINT2SCREEN(TEXT("enemy is on SearchPos"));
+			PRINT2SCREEN(TEXT("enemy is on SearchPos"));
 			mState = EEnemyState::Search;
 		}
 		else if(curDestinationName.Contains("EndPos")){
-			//PRINT2SCREEN(TEXT("enemy is on EndPos"));
+			PRINT2SCREEN(TEXT("enemy is on EndPos"));
+			currentTime=0;
 			mState = EEnemyState::Idle;
-			isEnemyActive = false;
 		}
 	}
 #pragma region Old

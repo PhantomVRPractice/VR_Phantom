@@ -108,6 +108,11 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "MySettings|Components")
 	int32 hp=10;
 
+	UPROPERTY(EditDefaultsOnly, Category = "MySettings|Hide")
+	bool bhide=false;
+
+
+
 	UFUNCTION()
 	void Damaged(int32 value);
 };

@@ -38,10 +38,10 @@ public:
 	// Called every frame
 	virtual void TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction) override;
 
-private:
+public:
 	// 애너미 활성화
 	// 지금 임시 활성화
-	UPROPERTY(EditAnywhere, Category = "FSM")
+	UPROPERTY(EditAnywhere,BlueprintReadWrite ,Category = "FSM")
 	bool isEnemyActive = true;
 	// 탐색지역이나 타겟을 향해 바라보기
 	UPROPERTY()
