@@ -86,7 +86,7 @@ void AEnemy::OnDamage()
 {
 	if (hp > 0) {
 		hp--;
-		PRINT2SCREEN(TEXT("Enemy Damage : %d"), hp);
+		//PRINT2SCREEN(TEXT("Enemy Damage : %d"), hp);
 	}
 	else {
 		// animation 
@@ -135,7 +135,7 @@ void AEnemy::SearchPlayer()
 	//PRINT2SCREEN(TEXT("PlayerDegree : %f"), degreeOfPlayer);
 	
 	// юс╫ц
-	PRINT2SCREEN(TEXT("%f"), (target->GetActorLocation() - GetActorLocation()).Size());
+	//PRINT2SCREEN(TEXT("%f"), (target->GetActorLocation() - GetActorLocation()).Size());
 	if (!target->bhide&&(target->GetActorLocation()-GetActorLocation()).Size()<=4000)
 	{
 		FSM->mState = EEnemyState::Attack;

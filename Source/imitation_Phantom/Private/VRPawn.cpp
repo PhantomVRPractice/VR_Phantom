@@ -40,14 +40,14 @@ AVRPawn::AVRPawn()
 	leftHand = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Left Hand Mesh"));
 	leftHand->SetupAttachment(leftMotionController);
 
-	leftLog = CreateDefaultSubobject<UTextRenderComponent>(TEXT("Left Log"));
-	leftLog->SetupAttachment(leftMotionController);
-	leftLog->SetRelativeLocation(FVector(0, 0, 15));
-	leftLog->SetRelativeRotation(FRotator(0, 180, 0));
-	leftLog->SetWorldSize(10);
-	leftLog->SetTextRenderColor(FColor(255, 255, 0, 255));
-	leftLog->SetHorizontalAlignment(EHTA_Center);
-	leftLog->SetVerticalAlignment(EVRTA_TextCenter);
+	//leftLog = CreateDefaultSubobject<UTextRenderComponent>(TEXT("Left Log"));
+	//leftLog->SetupAttachment(leftMotionController);
+	//leftLog->SetRelativeLocation(FVector(0, 0, 15));
+	//leftLog->SetRelativeRotation(FRotator(0, 180, 0));
+	//leftLog->SetWorldSize(10);
+	//leftLog->SetTextRenderColor(FColor(255, 255, 0, 255));
+	//leftLog->SetHorizontalAlignment(EHTA_Center);
+	//leftLog->SetVerticalAlignment(EVRTA_TextCenter);
 
 	rightMotionController = CreateDefaultSubobject<UMotionControllerComponent>(TEXT("Right Motion Controller"));
 	rightMotionController->SetupAttachment(RootComponent);
@@ -56,12 +56,12 @@ AVRPawn::AVRPawn()
 	rightHand = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("Right Hand Mesh"));
 	rightHand->SetupAttachment(rightMotionController);
 
-	rightLog = CreateDefaultSubobject<UTextRenderComponent>(TEXT("Right Log"));
-	rightLog->SetupAttachment(rightMotionController);
-	rightLog->SetWorldSize(10);
-	rightLog->SetTextRenderColor(FColor(255, 255, 0, 255));
-	rightLog->SetHorizontalAlignment(EHTA_Center);
-	rightLog->SetVerticalAlignment(EVRTA_TextCenter);
+	//rightLog = CreateDefaultSubobject<UTextRenderComponent>(TEXT("Right Log"));
+	//rightLog->SetupAttachment(rightMotionController);
+	//rightLog->SetWorldSize(10);
+	//rightLog->SetTextRenderColor(FColor(255, 255, 0, 255));
+	//rightLog->SetHorizontalAlignment(EHTA_Center);
+	//rightLog->SetVerticalAlignment(EVRTA_TextCenter);
 
 	lineFx = CreateDefaultSubobject<UNiagaraComponent>(TEXT("Line Effect"));
 	lineFx->SetupAttachment(RootComponent);
@@ -87,8 +87,8 @@ AVRPawn::AVRPawn()
 void AVRPawn::BeginPlay()
 {
 	Super::BeginPlay();
-	leftLog->SetText(FText::FromString("Left Log..."));
-	rightLog->SetText(FText::FromString("Right Log..."));
+	//leftLog->SetText(FText::FromString("Left Log..."));
+	//rightLog->SetText(FText::FromString("Right Log..."));
 
 	// 머리 장비 기준점 설정
 	UHeadMountedDisplayFunctionLibrary::SetTrackingOrigin(EHMDTrackingOrigin::Stage);

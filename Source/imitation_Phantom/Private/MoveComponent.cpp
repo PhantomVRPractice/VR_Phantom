@@ -72,7 +72,7 @@ void UMoveComponent::SetupPlayerInputComponent(class UEnhancedInputComponent* en
 void UMoveComponent::Move(const FInputActionValue& value)
 {
 	FVector2D controllerInput = value.Get<FVector2D>();
-	player->leftLog->SetText(FText::FromString(FString::Printf(TEXT("x: %.2f\r\ny: %.2f"), controllerInput.X, controllerInput.Y)));
+	//player->leftLog->SetText(FText::FromString(FString::Printf(TEXT("x: %.2f\r\ny: %.2f"), controllerInput.X, controllerInput.Y)));
 
 	FVector forwardVec = player->boatMesh->GetRightVector();
 	//FVector rightVec = FRotationMatrix(player->pc->GetControlRotation()).GetUnitAxis(EAxis::X);
@@ -84,7 +84,7 @@ void UMoveComponent::Rotate(const FInputActionValue& value)
 {
 	FVector2D rightConInput = value.Get<FVector2D>();
 
-	player->rightLog->SetText(FText::FromString(FString::Printf(TEXT("%.2f\r\n%.2f"), rightConInput.X, rightConInput.Y)));
+	//player->rightLog->SetText(FText::FromString(FString::Printf(TEXT("%.2f\r\n%.2f"), rightConInput.X, rightConInput.Y)));
 
 	if (player->pc != nullptr)
 	{

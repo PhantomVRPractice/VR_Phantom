@@ -73,7 +73,7 @@ void UGrabComponent::TickComponent(float DeltaTime, ELevelTick TickType, FActorC
 					}
 				}
 			}
-			DrawDebugSphere(GetWorld(), startLoc, 20, 30, FColor::Green, false, 1.0f);
+			//DrawDebugSphere(GetWorld(), startLoc, 20, 30, FColor::Green, false, 1.0f);
 		}
 	}
 }
@@ -109,7 +109,7 @@ void UGrabComponent::LeftGrabObject()
 			}
 		}
 	}
-	DrawDebugSphere(GetWorld(), startLoc, 20, 30, FColor::Green, false, 1.0f);
+//	DrawDebugSphere(GetWorld(), startLoc, 20, 30, FColor::Green, false, 1.0f);
 }
 
 void UGrabComponent::GrabObject()
@@ -209,7 +209,7 @@ void UGrabComponent::GrabObject()
 				}
 			}
 		}
-		DrawDebugSphere(GetWorld(), startLoc, 20, 30, FColor::Green, false, 1.0f);
+		//DrawDebugSphere(GetWorld(), startLoc, 20, 30, FColor::Green, false, 1.0f);
 	}
 }
 
