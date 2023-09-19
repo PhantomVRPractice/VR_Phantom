@@ -48,6 +48,7 @@ public:
 	bool isTurningFinished;
 
 public:
+	
 	// 플레이어를 찼았는지 판단
 	UPROPERTY(EditAnywhere, Category = "FSM")
 	bool bIsFoundPlayer = false;

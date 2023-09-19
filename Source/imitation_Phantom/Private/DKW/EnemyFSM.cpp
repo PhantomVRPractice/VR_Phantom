@@ -331,7 +331,8 @@ void UEnemyFSM::DamageState()
 	currentTime += GetWorld()->DeltaTimeSeconds;
 	if (currentTime > damageDelayTime)
 	{
-		mState = EEnemyState::Idle;
+		//mState = EEnemyState::Idle;
+		ChangeEnemyStateToAttack();
 		currentTime = 0;
 		anim->animState = mState;
 
@@ -427,6 +428,7 @@ void UEnemyFSM::FindPathByAI(FVector destination, FPathFindingResult& result)
 
 void UEnemyFSM::ChangeEnemyStateToAttack()
 {
+	bIsFoundPlayer = true;
 	target->Exposed();
 	mState = EEnemyState::Attack;
 }
