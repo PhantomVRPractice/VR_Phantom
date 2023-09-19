@@ -4,6 +4,7 @@
 #include "PickUpNo.h"
 #include "VRPawn.h"
 #include "DKW/Enemy.h"
+#include <Kismet/GameplayStatics.h>
 
 APickUpNo::APickUpNo()
 {
@@ -54,13 +55,16 @@ void APickUpNo::Tick(float DeltaTime)
 				if (!bsoundplay)
 				{
 					bsoundplay=true;
-					double NoPower = (CurVec-PreVec).Size();
+					CurVec = rightScene->GetComponentLocation();
+					float NoPower = (CurVec-PreVec).Size()/DeltaTime;
+					UE_LOG(LogTemp,Warning,TEXT("Power=%f"), NoPower);
 					//노 들어갈때 사운드 재생 (볼륨=파워)
+					UGameplayStatics::PlaySoundAtLocation(GetWorld(),NoSound,CurVec,NoPower/2000.0f);//아마 제일 쎄게 넣으면 2000 나올거임
 					// Curvec 에서부터 Debug원만들기(r=파워)
 					TArray<FOverlapResult> hitInfos;
 					FVector startLoc = CurVec;
 					float rad= NoPower*1;
-					if (GetWorld()->OverlapMultiByProfile(hitInfos, startLoc, FQuat::Identity, FName("Enemy")/*에너미콜리전으로 바꿔줘라*/, FCollisionShape::MakeSphere(rad)))
+					if (GetWorld()->OverlapMultiByProfile(hitInfos, startLoc, FQuat::Identity, FName("Enemy"), FCollisionShape::MakeSphere(rad)))
 					{
 						for (const FOverlapResult& hitInfo : hitInfos)
 						{
@@ -126,5 +130,6 @@ void APickUpNo::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class 
 void APickUpNo::OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
 {
 	UE_LOG(LogTemp, Warning, TEXT("overend"));
+	bsoundplay=false;
 	binwater=false;
 }
