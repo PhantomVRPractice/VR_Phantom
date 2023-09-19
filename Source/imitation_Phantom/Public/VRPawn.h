@@ -111,7 +111,15 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category = "MySettings|Hide")
 	bool bhide=false;
 
+	//플레이어를 발견한 에너미수
+	UPROPERTY(EditDefaultsOnly, Category = "MySettings|Hide")
+	int32 exposedEnemy=0;
+	//발각됐니
+	UPROPERTY(EditDefaultsOnly, Category = "MySettings|Hide")
+	bool bexposed=false;
 
+	void Exposed();
+	void KillExposeEnemy();
 
 	UFUNCTION()
 	void Damaged(int32 value);

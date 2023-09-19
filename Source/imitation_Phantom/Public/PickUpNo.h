@@ -33,6 +33,7 @@ public:
 	bool binwater=false;
 	bool bfirstTick = true;
 	bool bright = true;
+	bool bsoundplay=false;
 	UPROPERTY(EditAnywhere, Category="MyAction")
 	FVector PreVec;
 

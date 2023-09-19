@@ -150,6 +150,26 @@ void AVRPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 	}
 }
 
+void AVRPawn::Exposed()
+{
+	if(!bexposed)
+		bexposed=true;
+	exposedEnemy+=1;
+}
+
+void AVRPawn::KillExposeEnemy()
+{
+	if (exposedEnemy-1>0)
+	{
+		exposedEnemy -= 1;
+	}
+	else
+	{
+		exposedEnemy=0;
+		bexposed=false;
+	}
+}
+
 void AVRPawn::Damaged(int32 value)
 {
 	if (hp-value > 0) {

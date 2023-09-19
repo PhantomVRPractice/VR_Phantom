@@ -3,6 +3,7 @@
 
 #include "PickUpNo.h"
 #include "VRPawn.h"
+#include "DKW/Enemy.h"
 
 APickUpNo::APickUpNo()
 {
@@ -50,6 +51,27 @@ void APickUpNo::Tick(float DeltaTime)
 			}
 			else {
 				PreVec=CurVec;
+				if (!bsoundplay)
+				{
+					bsoundplay=true;
+					double NoPower = (CurVec-PreVec).Size();
+					//노 들어갈때 사운드 재생 (볼륨=파워)
+					// Curvec 에서부터 Debug원만들기(r=파워)
+					TArray<FOverlapResult> hitInfos;
+					FVector startLoc = CurVec;
+					float rad= NoPower*1;
+					if (GetWorld()->OverlapMultiByProfile(hitInfos, startLoc, FQuat::Identity, FName("Enemy")/*에너미콜리전으로 바꿔줘라*/, FCollisionShape::MakeSphere(rad)))
+					{
+						for (const FOverlapResult& hitInfo : hitInfos)
+						{
+							if (AEnemy* hitEnemy = Cast<AEnemy>(hitInfo.GetActor()))
+							{
+								//소리를 들은 에너미를 공격상태로 바꿔줘라
+							}
+						}
+					}
+					DrawDebugSphere(GetWorld(), startLoc, rad, 30, FColor::Green, false, 1.0f);	
+				}
 				if (bright)
 				{
 					//오른쪽으로 젓기
