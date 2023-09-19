@@ -240,6 +240,7 @@ void UEnemyFSM::SearchState()
 
 	// 애니메이션을 하던 중에 cone 에 플레이어가 걸린다면
 	if (bIsFoundPlayer) {
+		target->Exposed();
 		mState = EEnemyState::Attack;
 		anim->animState = mState;
 	}
@@ -333,6 +334,8 @@ void UEnemyFSM::DamageState()
 		mState = EEnemyState::Idle;
 		currentTime = 0;
 		anim->animState = mState;
+
+		
 	}
 #pragma endregion	
 }
@@ -353,6 +356,9 @@ void UEnemyFSM::DieState()
 	// Z 값이 -100 아래로 내려가면
 	if (P.Z < -100)
 	{
+		if (bIsFoundPlayer) {
+			target->KillExposeEnemy();
+		}
 		// 없애고 싶다.
 		me->Destroy();
 	}
@@ -378,6 +384,7 @@ void UEnemyFSM::OnDamageProcess()
 		int32 index = FMath::RandRange(0, 1);
 		//FString sectionName = FString::Printf(TEXT("Damage%d"), index);
 		//anim->PlayDamageAnim(FName(*sectionName));
+
 	}
 	// 그렇지 않으면 
 	else
@@ -418,4 +425,9 @@ void UEnemyFSM::FindPathByAI(FVector destination, FPathFindingResult& result)
 	result = ns->FindPathSync(query);
 }
 
+void UEnemyFSM::ChangeEnemyStateToAttack()
+{
+	target->Exposed();
+	mState = EEnemyState::Attack;
+}
 
