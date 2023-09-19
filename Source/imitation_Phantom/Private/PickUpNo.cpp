@@ -5,6 +5,7 @@
 #include "VRPawn.h"
 #include "DKW/Enemy.h"
 #include <Kismet/GameplayStatics.h>
+#include "DKW/EnemyFSM.h"
 
 APickUpNo::APickUpNo()
 {
@@ -63,14 +64,14 @@ void APickUpNo::Tick(float DeltaTime)
 					// Curvec 에서부터 Debug원만들기(r=파워)
 					TArray<FOverlapResult> hitInfos;
 					FVector startLoc = CurVec;
-					float rad= NoPower*1;
+					float rad= NoPower;
 					if (GetWorld()->OverlapMultiByProfile(hitInfos, startLoc, FQuat::Identity, FName("Enemy"), FCollisionShape::MakeSphere(rad)))
 					{
 						for (const FOverlapResult& hitInfo : hitInfos)
 						{
 							if (AEnemy* hitEnemy = Cast<AEnemy>(hitInfo.GetActor()))
 							{
-								//소리를 들은 에너미를 공격상태로 바꿔줘라
+								hitEnemy->FSM->ChangeEnemyStateToAttack();
 							}
 						}
 					}
