@@ -138,7 +138,7 @@ void AEnemy::SearchPlayer()
 	//PRINT2SCREEN(TEXT("%f"), (target->GetActorLocation() - GetActorLocation()).Size());
 	if (!target->bhide&&(target->GetActorLocation()-GetActorLocation()).Size()<=4000)
 	{
-		FSM->mState = EEnemyState::Attack;
+		FSM->ChangeEnemyStateToAttack();
 	}
 	if (degreeOfPlayer < 180) {
 		// Enemy의 상태를 공격으로 변경

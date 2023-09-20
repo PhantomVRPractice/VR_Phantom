@@ -87,7 +87,6 @@ void UEnemyFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 		DieState();
 		break;
 	}
-
 }
 
 // 일정시간이 지나면 상태를 이동으로 바꾸고 싶다
@@ -98,7 +97,6 @@ void UEnemyFSM::IdleState()
 		currentTime += GetWorld()->DeltaTimeSeconds;
 		if (currentTime > idleDelayTime)
 		{
-			UE_LOG(LogTemp, Warning, TEXT("%f"), currentTime);
 			mState = EEnemyState::Move;
 			currentTime = 0;
 			anim->animState = mState;
@@ -106,18 +104,10 @@ void UEnemyFSM::IdleState()
 		}
 	}
 
-#pragma region OldCode
-	//--------------------------------------------
-		//currentTime += GetWorld()->DeltaTimeSeconds;
-		//if (currentTime > idleDelayTime)
-		//{
-		//	mState = EEnemyState::Move;
-		//	currentTime = 0;
-		//	
-		//	anim->animState = mState;
-		//	GetRandomPosInNavMesh(me->GetActorLocation(), 500, randomPos);
-		//}
-#pragma endregion
+	// 여기서 플레이어 소리가 들리면 공격상태로 전환
+	// 경민이에게 있나?
+
+
 }
 
 // 타겟으로 이동하고 싶다
@@ -126,9 +116,7 @@ void UEnemyFSM::MoveState()
 {
 	if(!refPositions[curDestinationName])
 	{
-		//PRINT2SCREEN(TEXT("No CurDestination Pos"));
-
-
+		PRINT2SCREEN(TEXT("No CurDestination Pos"));
 		return;
 	}
 	FVector dest = refPositions[curDestinationName]->GetActorLocation();
@@ -140,64 +128,18 @@ void UEnemyFSM::MoveState()
 	// 타겟쪽으로이동할 수 있으면 거기로 간다
 	if (r.Result == ENavigationQueryResult::Success) {
 		isAlreadyGoal = ai->MoveToLocation(dest);
-		//PRINT2SCREEN(TEXT("Enemy can reach to dest"));
 	}
 
 	// 도착했다면 목표지점에 따라서 다르게 행동
 	if (isAlreadyGoal == EPathFollowingRequestResult::AlreadyAtGoal) {
 		if (curDestinationName.Contains("SearchPos")) {
-			//PRINT2SCREEN(TEXT("enemy is on SearchPos"));
 			mState = EEnemyState::Search;
 		}
 		else if(curDestinationName.Contains("EndPos")){
-			//PRINT2SCREEN(TEXT("enemy is on EndPos"));
 			currentTime=0;
 			mState = EEnemyState::Idle;
 		}
 	}
-#pragma region Old
-		//// -------------------------------------------
-			//FVector dest = target->GetActorLocation();
-			//FVector Direction = dest - me->GetActorLocation();
-			//float distance = Direction.Length();
-			//Direction.Normalize();
-
-			//// navi 시스템 세팅
-			//auto ns = UNavigationSystemV1::GetNavigationSystem(GetWorld());
-
-			//FPathFindingQuery query;
-			//FAIMoveRequest req;
-			//req.SetGoalLocation(dest);
-			//req.SetAcceptanceRadius(3);
-
-			//ai->BuildPathfindingQuery(req, query);
-			//auto r = ns->FindPathSync(query);
-
-			//// 타겟쪽으로이동할 수 있으면
-			//if (r.Result == ENavigationQueryResult::Success) {
-			//	// 거기로 간다
-			//	ai->MoveToLocation(dest);
-			//}
-			//// 그렇지 않으면
-			//else {
-			//	// 랜덤한 위치를 찾아서 그리로 이동하고 싶다
-			//	auto result = ai->MoveToLocation(randomPos);
-			//	// 도착했다면
-			//	if (result == EPathFollowingRequestResult::AlreadyAtGoal) {
-			//		GetRandomPosInNavMesh(me->GetActorLocation(), 500, randomPos);
-			//	}
-			//}
-
-			//// 공격범위 안에 들어오면
-			//if (distance < attackRange) {
-			//	// 상태를 공격으로 전환하고 싶다
-			//	mState = EEnemyState::Attack;
-			//	anim->animState = mState;
-			//	currentTime = attackDelayTime;
-
-			//	ai->StopMovement();
-			//}
-#pragma endregion
 }
 
 
@@ -428,8 +370,12 @@ void UEnemyFSM::FindPathByAI(FVector destination, FPathFindingResult& result)
 
 void UEnemyFSM::ChangeEnemyStateToAttack()
 {
+	if(mState== EEnemyState::Attack)
+	return;
+
 	bIsFoundPlayer = true;
 	target->Exposed();
 	mState = EEnemyState::Attack;
+	
 }
 
