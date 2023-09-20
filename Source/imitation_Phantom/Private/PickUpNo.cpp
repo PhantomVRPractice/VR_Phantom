@@ -64,13 +64,15 @@ void APickUpNo::Tick(float DeltaTime)
 					// Curvec 에서부터 Debug원만들기(r=파워)
 					TArray<FOverlapResult> hitInfos;
 					FVector startLoc = CurVec;
-					float rad= NoPower;
-					if (GetWorld()->OverlapMultiByProfile(hitInfos, startLoc, FQuat::Identity, FName("Enemy"), FCollisionShape::MakeSphere(rad)))
+					float rad= NoPower*15;
+					if (GetWorld()->OverlapMultiByProfile(hitInfos, startLoc, FQuat::Identity, FName("NOSound"), FCollisionShape::MakeSphere(rad)))
 					{
+						UE_LOG(LogTemp, Warning, TEXT("hitInfo=%d"),hitInfos.Num());
 						for (const FOverlapResult& hitInfo : hitInfos)
 						{
 							if (AEnemy* hitEnemy = Cast<AEnemy>(hitInfo.GetActor()))
 							{
+								UE_LOG(LogTemp, Warning, TEXT("ChangeEnemy"));
 								hitEnemy->FSM->ChangeEnemyStateToAttack();
 							}
 						}

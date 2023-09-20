@@ -152,9 +152,12 @@ void AVRPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void AVRPawn::Exposed()
 {
+	UE_LOG(LogTemp, Warning, TEXT("1 bool = %d exposedEnemy:%d"), bexposed, exposedEnemy);
 	if(!bexposed)
 		bexposed=true;
+	
 	exposedEnemy+=1;
+	UE_LOG(LogTemp,Warning,TEXT("2 bool = %d exposedEnemy:%d"), bexposed,exposedEnemy);
 }
 
 void AVRPawn::KillExposeEnemy()
@@ -162,11 +165,13 @@ void AVRPawn::KillExposeEnemy()
 	if (exposedEnemy-1>0)
 	{
 		exposedEnemy -= 1;
+		UE_LOG(LogTemp, Warning, TEXT("K-bool = %d exposedEnemy:%d"), bexposed, exposedEnemy);
 	}
 	else
 	{
 		exposedEnemy=0;
 		bexposed=false;
+		UE_LOG(LogTemp,Warning,TEXT("K-bool = %d exposedEnemy:%d"),bexposed,exposedEnemy);
 	}
 }
 
