@@ -45,11 +45,12 @@ void UPlayerFire::TickComponent(float DeltaTime, ELevelTick TickType, FActorComp
 
 	FHitResult hitInfo;
 
+	
 	// temp draw line func
 	gun = Cast<APickUpMyGun>(UGameplayStatics::GetActorOfClass(GetWorld(), APickUpMyGun::StaticClass()));
 	FVector pos = gun->GunComp->GetSocketLocation("FirePosition");
 
-	DrawDebugLine(GetWorld(), pos, pos + gun->GunComp->GetRightVector() * 1000, FColor::Red);
+	DrawDebugLine(GetWorld(), pos, pos + gun->GunComp->GetRightVector() * 50000, FColor::Red);
 	
 }
 
@@ -83,7 +84,13 @@ void UPlayerFire::Fire()
 	if (gun->GetAmmoCount() - 1 >= 0) {
 		gun->SetAmmoCount(gun->GetAmmoCount() - 1);
 		PRINT2SCREEN(TEXT("Remain Ammo=%d"),gun->GetAmmoCount());
-		GetWorld()->SpawnActor<ABullet>(bulletFactory, pos, rot);
+		
+		FActorSpawnParameters param;
+		param.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+		GetWorld()->SpawnActor<ABullet>(bulletFactory, pos, rot, param);
 	}
+
+
 }
 

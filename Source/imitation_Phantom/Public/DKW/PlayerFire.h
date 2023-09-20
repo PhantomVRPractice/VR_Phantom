@@ -29,6 +29,8 @@ public:
 
 	UPROPERTY()
 	TSubclassOf<class ABullet> bulletFactory;
+	UPROPERTY(EditAnywhere, Category = "bullet")
+	class USoundBase* fireSound;
 
 	UPROPERTY()
 	class AVRPawn* player;

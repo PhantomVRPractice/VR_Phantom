@@ -84,19 +84,23 @@ void AEnemy::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
 
 void AEnemy::OnDamage()
 {
-	if (hp > 0) {
-		hp--;
-		//PRINT2SCREEN(TEXT("Enemy Damage : %d"), hp);
-	}
-	else {
-		// animation 
-		// 줌음을 FSM에서 처리한다
-		// 죽음처리는 알파에 진행
-		// FSM->OnDamageProcess();
+	FSM->OnDamageProcess();
 
-		// 프로토에는 Destroy를 바로 여기서 한다
-		Destroy();
-	}
+#pragma region old
+	//if (hp > 0) {
+	//	hp--;
+	//	//PRINT2SCREEN(TEXT("Enemy Damage : %d"), hp);
+	//}
+	//else {
+	//	// animation 
+	//	// 줌음을 FSM에서 처리한다
+	//	// 죽음처리는 알파에 진행
+	//	// FSM->OnDamageProcess();
+
+	//	// 프로토에는 Destroy를 바로 여기서 한다
+	//	Destroy();
+	//}
+#pragma endregion
 }
 
 void AEnemy::Fire()

@@ -39,9 +39,6 @@ void UEnemyFSM::BeginPlay()
 	ai = Cast<AAIController>(me->GetController());
 	me->GetCharacterMovement()->MaxWalkSpeed = speed;
 
-	// 초기 HP
-	hp = initialHP;
-
 	// 시작위치 저장
 	//refPositions.Add("StartPos", me);
 }
@@ -58,9 +55,11 @@ void UEnemyFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 	}
 
 	// 현재 상태 출력
-	/*FString strState;
-	UEnum::GetValueAsString(mState, strState);*/
-	//PRINT2SCREEN(TEXT("%s"), * strState);
+	FString strState;
+	UEnum::GetValueAsString(mState, strState);
+	PRINT2SCREEN(TEXT("%s"), * strState);
+	PRINT2SCREEN(TEXT("hp : %d"), me->hp);
+
 
 	// FSM 목차
 	switch (mState)
@@ -244,32 +243,10 @@ void UEnemyFSM::AttackState()
 		anim->animState = mState;
 	}
 
-#pragma region Old
-	//// 타겟이 도망가면 상태를 이동으로 전환하고 싶다.
-	//float distance = FVector::Dist(target->GetActorLocation(), me->GetActorLocation());
-
-	//// -> 타겟이 공격범위를 벗어나면
-	//if (distance > attackRange)
-	//{
-	//	mState = EEnemyState::Move;
-	//	currentTime = 0;
-	//	anim->animState = mState;
-	//	GetRandomPosInNavMesh(me->GetActorLocation(), 500, randomPos);
-	//}
-#pragma endregion
 }
 
 void UEnemyFSM::DamageState()
 {
-	// 일정시간동안 Damage animation 을 재생할 시간을 준다
-	// 일정시간이 지나면 탐색으로 넘어간다
-	//currentTime += GetWorld()->DeltaTimeSeconds;
-	//if(currentTime > )
-
-#pragma region Old
-	// 1. 시간이 흘렀으니까
-	// 2. 경과시간이 대기시간을 초과했으니까
-	// 3. 상태를 대기로 전환하고 싶다.
 	currentTime += GetWorld()->DeltaTimeSeconds;
 	if (currentTime > damageDelayTime)
 	{
@@ -277,28 +254,21 @@ void UEnemyFSM::DamageState()
 		ChangeEnemyStateToAttack();
 		currentTime = 0;
 		anim->animState = mState;
-
-		
 	}
-#pragma endregion	
 }
 
 
 void UEnemyFSM::DieState()
 {
 	// 실행해도 된다고 안하면 아래내용 실행하지 말자.
-	if (anim->isDiePlaying == false)
-	{
-		return;
-	}
-	//아래로 계속 이동하다가 P = P0 + vt
-	FVector P = me->GetActorLocation() + FVector::DownVector * dieMoveSpeed * GetWorld()->DeltaTimeSeconds;
-	me->SetActorLocation(P);
+	//if (anim->isDiePlaying == false)
+	//{
+	//	return;
+	//}
 
-	//눈에 안보이는 시점까지 내려가면
-	// Z 값이 -100 아래로 내려가면
-	if (P.Z < -100)
-	{
+	currentTime += GetWorld()->DeltaTimeSeconds;
+	if (currentTime > dieDelayTime)
+	{	
 		if (bIsFoundPlayer) {
 			target->KillExposeEnemy();
 		}
@@ -312,31 +282,26 @@ void UEnemyFSM::DieState()
 // 피격시 호출될 콜백(이벤트) 함수
 void UEnemyFSM::OnDamageProcess()
 {
-	// 체력을 감소시키자
-	hp--;
-
 	currentTime = 0;
 	// 체력이 0 이상이면
-	if (hp > 0)
+	if (me->hp > 1)
 	{
-		// 상태를 피격으로 전환하고 싶다.
+		PRINT2SCREEN(TEXT("OnDamageProcess"));
+		me->hp--;
 		mState = EEnemyState::Damage;
-		// 애니메이션 피격으로 상태전환
 		anim->bDamage = true;
+		
 		// 피격 애니메이션몽타주 재생
-		int32 index = FMath::RandRange(0, 1);
+		//int32 index = FMath::RandRange(0, 1);s
 		//FString sectionName = FString::Printf(TEXT("Damage%d"), index);
 		//anim->PlayDamageAnim(FName(*sectionName));
-
 	}
 	// 그렇지 않으면 
 	else
-	{
-		// 상태를 Die 로 전환하고 싶다.
-		mState = EEnemyState::Die;
-		// 콜리전 꺼주기
-		
+	{	
+		me->hp = 0;
 		me->GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+		mState = EEnemyState::Die;
 
 		//anim->PlayDamageAnim(TEXT("Die"));
 	}
@@ -372,10 +337,10 @@ void UEnemyFSM::ChangeEnemyStateToAttack()
 {
 	if(mState== EEnemyState::Attack)
 	return;
+	
 
 	bIsFoundPlayer = true;
 	target->Exposed();
 	mState = EEnemyState::Attack;
-	
 }
 

@@ -6,6 +6,7 @@
 #include <GameFramework/ProjectileMovementComponent.h>
 #include "../imitation_Phantom.h"
 #include "DKW/Enemy.h"
+#include "Kismet/GameplayStatics.h"
 
 // Sets default values
 ABullet::ABullet()
@@ -23,13 +24,12 @@ ABullet::ABullet()
 	bodyMeshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("BodyMeshComp"));
 	bodyMeshComp->SetupAttachment(collisionComp);
 	bodyMeshComp->SetCollisionEnabled(ECollisionEnabled::NoCollision);
-	bodyMeshComp->SetRelativeScale3D(FVector(0.15f));
+	bodyMeshComp->SetRelativeScale3D(FVector(0.1f));
 
 	ConstructorHelpers::FObjectFinder<UStaticMesh> tempBullet (TEXT("/Script/Engine.StaticMesh'/Engine/BasicShapes/Sphere.Sphere'"));
 	if (tempBullet.Succeeded()) {
 		bodyMeshComp->SetStaticMesh(tempBullet.Object);
 	}
-
 
 	// Projectile Comp
 	movementComp = CreateDefaultSubobject<UProjectileMovementComponent>(TEXT("MovementComp"));
@@ -37,9 +37,8 @@ ABullet::ABullet()
 
 	//init Projectile
 	movementComp->InitialSpeed = 5000;
-	movementComp->MaxSpeed = 5000;
+	movementComp->MaxSpeed = 10000;
 	movementComp->bShouldBounce = true;
-	movementComp->Bounciness = 0.3f;
 	movementComp->ProjectileGravityScale=0;
 	// life time
 	InitialLifeSpan = 2.0f;
@@ -67,8 +66,15 @@ void ABullet::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, 
 
 	if (enemy) {
 		PRINT2SCREEN(TEXT("Enemy Collided"));
-		//enemy->OnDamage();
-		enemy->Destroy();
+		enemy->OnDamage();
+	}
+	Destroy();
+
+	if (bulletEffectFactory) {
+		FTransform trans;
+		trans.SetLocation(SweepResult.ImpactPoint);
+		trans.SetRotation(SweepResult.ImpactNormal.ToOrientationQuat());
+		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), bulletEffectFactory, trans);
 	}
 }
 

@@ -19,7 +19,7 @@ public:
 	class USkeletalMeshComponent* GunComp;
 
 	UPROPERTY()
-	int32 ammo = 0;
+	int32 ammo = 30;
 
 	int32 GetAmmoCount(){return ammo;}
 	void SetAmmoCount(int32 ammoNum){ammo = ammoNum;}

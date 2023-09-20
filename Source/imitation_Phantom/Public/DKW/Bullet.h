@@ -25,7 +25,7 @@ public:
 
 
 
-	UPROPERTY(VisibleAnywhere, Category = Movement)
+	UPROPERTY(EditAnywhere, Category = Movement)
 	class UProjectileMovementComponent* movementComp;
 
 	UPROPERTY(EditAnywhere, Category = Collision)
@@ -34,6 +34,13 @@ public:
 	UPROPERTY(EditAnywhere, Category = BodyMesh)
 	class UStaticMeshComponent* bodyMeshComp;
 
+
+	UPROPERTY(EditDefaultsOnly, Category=Effect)
+	class UParticleSystem* bulletEffectFactory;
+
+
+
 	UFUNCTION()
 	void OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
 };

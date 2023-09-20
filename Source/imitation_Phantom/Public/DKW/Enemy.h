@@ -39,8 +39,10 @@ public:
 	// ÃÑ¾Ë
 	TSubclassOf<class AEnemyBullet> bulletFactory;
 
-	// Hp
-	int hp = 5;
+	UPROPERTY(EditAnywhere, Category = "MySetting")
+	int32 initialHP = 5;
+	UPROPERTY(EditAnywhere, Category = "MySetting")
+	int32 hp = 5;
 	
 	void OnDamage();
 

@@ -98,16 +98,12 @@ public:
 	// 공격
 	UPROPERTY(EditAnywhere, Category="FSM")
 	float attackDelayTime = 2;
-	UPROPERTY(EditAnywhere, Category="FSM")
-	int32 initialHP = 5;
-	UPROPERTY(EditAnywhere, Category="FSM")
-	int32 hp = 0;
 
 	// 피격
 	UPROPERTY(EditAnywhere, Category="FSM")
 	float damageDelayTime = 2;
 	UPROPERTY(EditAnywhere, Category= "FSM")
-	float dieMoveSpeed = 100.f;
+	float dieDelayTime = 5;
 
 public:	// Animation
 	UPROPERTY()

@@ -33,10 +33,9 @@ AEnemyBullet::AEnemyBullet()
 	movementComp->SetUpdatedComponent(collisionComp);
 
 	//init Projectile
-	movementComp->InitialSpeed = 2000;
-	movementComp->MaxSpeed = 5000;
-	movementComp->bShouldBounce = true;
-	movementComp->Bounciness = 0.3f;
+	movementComp->InitialSpeed = 10000;
+	movementComp->MaxSpeed = 10000;
+	movementComp->bShouldBounce = false;
 	movementComp->ProjectileGravityScale=0;
 	// life time
 	InitialLifeSpan = 10.0f;
@@ -69,6 +68,8 @@ void AEnemyBullet::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedCompon
 		//enemy->OnDamage();
 		player->Damaged(1);
 	}
+
+	Destroy();
 }
 
 void AEnemyBullet::setdirection(FVector vec)
