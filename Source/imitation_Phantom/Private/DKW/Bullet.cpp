@@ -50,9 +50,8 @@ ABullet::ABullet()
 	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> tempBulletEffect (TEXT("/Script/Niagara.NiagaraSystem'/Game/DKW/Effect/NS_BulletEffect.NS_BulletEffect'"));
 	if (tempBulletEffect.Succeeded()) {
 		hitEffectFactory = tempBulletEffect.Object;
-		GEngine->AddOnScreenDebugMessage(-1, 1, FColor::Yellow, FString::Printf(TEXT("blablablablablabl")), true, FVector2D(1, 1));
+		
 	}
-
 }
 
 // Called when the game starts or when spawned

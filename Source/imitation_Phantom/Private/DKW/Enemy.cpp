@@ -11,6 +11,7 @@
 #include <Components/SceneComponent.h>
 #include "DKW/EnemyFSM.h"
 #include "VRPawn.h"
+#include "../Plugins/FX/Niagara/Source/Niagara/Public/NiagaraFunctionLibrary.h"
 
 // Sets default values
 AEnemy::AEnemy()
@@ -110,7 +111,10 @@ void AEnemy::Fire()
 	FTransform firePos = gunMeshComp->GetSocketTransform(TEXT("FirePosition"));
 	firePos.SetRotation((target->GetActorLocation() - firePos.GetLocation()).Rotation().Quaternion());
 	AEnemyBullet* EB=GetWorld()->SpawnActor<AEnemyBullet>(bulletFactory, firePos);
-	
+
+	// 사운드와 이펙트 생성
+	if (bulletSound)  UGameplayStatics::PlaySoundAtLocation(GetWorld(), bulletSound, firePos.GetLocation());
+	if (bulletEffect) UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), bulletEffect, firePos.GetLocation());
 }
 
 void AEnemy::SearchPlayer()
@@ -122,11 +126,11 @@ void AEnemy::SearchPlayer()
 	USceneComponent* handLight = Cast<USceneComponent>(GetDefaultSubobjectByName(TEXT("HandLight")));
 	
 	if(!target){ 
-		//PRINT2SCREEN(TEXT("noTarget"));
+		PRINT2SCREEN(TEXT("noTarget"));
 		return; 
 	}
 	if(!handLight){
-		//PRINT2SCREEN(TEXT("noHandLight"));
+		PRINT2SCREEN(TEXT("noHandLight"));
 		return;
 	} 
 	FVector A = handLight->GetForwardVector();
@@ -142,7 +146,7 @@ void AEnemy::SearchPlayer()
 	//PRINT2SCREEN(TEXT("%f"), (target->GetActorLocation() - GetActorLocation()).Size());
 	if (!target->bhide&&(target->GetActorLocation()-GetActorLocation()).Size()<=4000)
 	{
-		FSM->ChangeEnemyStateToAttack();
+		FSM->bIsFoundPlayer = true;
 	}
 	if (degreeOfPlayer < 180) {
 		// Enemy의 상태를 공격으로 변경

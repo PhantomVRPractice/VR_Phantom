@@ -40,6 +40,13 @@ public:
 	TSubclassOf<class AEnemyBullet> bulletFactory;
 
 	UPROPERTY(EditAnywhere, Category = "MySetting")
+	class USoundBase* bulletSound;
+
+	UPROPERTY(EditAnywhere, Category = "MySetting")
+	class UNiagaraSystem* bulletEffect;
+
+
+	UPROPERTY(EditAnywhere, Category = "MySetting")
 	int32 initialHP = 5;
 	UPROPERTY(EditAnywhere, Category = "MySetting")
 	int32 hp = 5;
