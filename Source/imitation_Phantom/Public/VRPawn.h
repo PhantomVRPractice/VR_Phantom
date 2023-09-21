@@ -123,4 +123,20 @@ public:
 
 	UFUNCTION()
 	void Damaged(int32 value);
+	
+	/*UPROPERTY(EditAnywhere, BlueprintReadWrite,Category=UI)
+	TSubclassOf<class UExposedUI> Screen_Widget;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite,Category=UI)
+	class UExposedUI* Screen_UI;*/
+
+	UPROPERTY(EditDefaultsOnly, Category = "MySettings|Screen")
+	TSubclassOf<class UUserWidget> ScreenUI;
+
+	UPROPERTY(EditDefaultsOnly, Category = "MySettings|Screen")
+	class UWidgetComponent* MyWidget;
+
+	UPROPERTY(EditDefaultsOnly, Category = "MySettings|Screen")
+	class UExposedUI* ExposeUI;
+
+
 };

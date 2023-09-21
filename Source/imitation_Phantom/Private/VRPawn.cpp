@@ -20,6 +20,10 @@
 #include "PickUpMyGun.h"
 #include "DKW/PlayerFire.h"
 #include "PickUpAmmo.h"
+#include <UMG/Public/Components/Widget.h>
+#include <UMG/Public/Components/WidgetComponent.h>
+#include "ExposedUI.h"
+#include <UMG/Public/Components/TextBlock.h>
 // Sets default values
 AVRPawn::AVRPawn()
 {
@@ -80,7 +84,9 @@ AVRPawn::AVRPawn()
 	GunScene->SetupAttachment(boatMesh);
 	MyAmmoScene = CreateDefaultSubobject<USceneComponent>(TEXT("MyAmmo Scene"));
 	MyAmmoScene->SetupAttachment(boatMesh);
-
+	MyWidget=CreateDefaultSubobject<UWidgetComponent>(TEXT("MyScreenWidget"));
+	MyWidget->SetupAttachment(boatMesh);
+	
 }
 
 // Called when the game starts or when spawned
@@ -128,6 +134,7 @@ void AVRPawn::BeginPlay()
 		}
 		
 	}
+	ExposeUI=Cast<UExposedUI>(MyWidget->GetUserWidgetObject());
 }
 
 // Called every frame
@@ -154,8 +161,11 @@ void AVRPawn::Exposed()
 {
 	UE_LOG(LogTemp, Warning, TEXT("1 bool = %d exposedEnemy:%d"), bexposed, exposedEnemy);
 	if(!bexposed)
+	{
 		bexposed=true;
-	
+		ExposeUI->screenText->SetText(FText::FromString(FString(TEXT("Detected"))));
+		ExposeUI->screenText->SetColorAndOpacity(FSlateColor(FLinearColor(1,0,0,1)));
+	}
 	exposedEnemy+=1;
 	UE_LOG(LogTemp,Warning,TEXT("2 bool = %d exposedEnemy:%d"), bexposed,exposedEnemy);
 }
@@ -172,6 +182,16 @@ void AVRPawn::KillExposeEnemy()
 		exposedEnemy=0;
 		bexposed=false;
 		UE_LOG(LogTemp,Warning,TEXT("K-bool = %d exposedEnemy:%d"),bexposed,exposedEnemy);
+		if (bhide)
+		{
+			ExposeUI->screenText->SetText(FText::FromString(FString(TEXT("Hidden"))));
+			ExposeUI->screenText->SetColorAndOpacity(FSlateColor(FLinearColor(0, 0, 1, 1)));
+		}
+		else
+		{
+			ExposeUI->screenText->SetText(FText::FromString(FString(TEXT("Exposed"))));
+			ExposeUI->screenText->SetColorAndOpacity(FSlateColor(FLinearColor(0, 1, 0, 1)));
+		}
 	}
 }
 

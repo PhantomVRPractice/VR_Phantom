@@ -3,6 +3,8 @@
 
 #include "Bush.h"
 #include "VRPawn.h"
+#include "ExposedUI.h"
+#include <UMG/Public/Components/TextBlock.h>
 
 // Sets default values
 ABush::ABush()
@@ -35,6 +37,11 @@ void ABush::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AAct
 	{
 		player->bhide=true;
 		UE_LOG(LogTemp,Warning,TEXT("player hide"));
+		if (!player->bexposed)
+		{
+			player->ExposeUI->screenText->SetText(FText::FromString(FString(TEXT("Hidden"))));
+			player->ExposeUI->screenText->SetColorAndOpacity(FSlateColor(FLinearColor(0, 0, 1, 1)));
+		}
 	}
 }
 
@@ -45,6 +52,11 @@ void ABush::OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor
 	{
 		player->bhide = false;
 		UE_LOG(LogTemp, Warning, TEXT("player open"));
+		if (!player->bexposed)
+		{
+			player->ExposeUI->screenText->SetText(FText::FromString(FString(TEXT("Exposed"))));
+			player->ExposeUI->screenText->SetColorAndOpacity(FSlateColor(FLinearColor(0, 1, 0, 1)));
+		}
 	}
 }
 

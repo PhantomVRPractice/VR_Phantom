@@ -13,5 +13,7 @@ UCLASS()
 class IMITATION_PHANTOM_API UExposedUI : public UUserWidget
 {
 	GENERATED_BODY()
-	
+public:
+	UPROPERTY(VisibleAnywhere, meta=(BindWidget), Category=MySettings)
+	class UTextBlock* screenText;
 };

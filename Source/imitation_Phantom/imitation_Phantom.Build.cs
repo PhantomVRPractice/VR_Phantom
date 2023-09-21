@@ -8,7 +8,7 @@ public class imitation_Phantom : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "HeadMountedDisplay", "Niagara", "AIModule", "NavigationSystem" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "EnhancedInput", "HeadMountedDisplay", "Niagara", "AIModule", "NavigationSystem" ,"UMG", "SlateCore" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 
