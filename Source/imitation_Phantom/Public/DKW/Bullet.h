@@ -36,7 +36,7 @@ public:
 
 
 	UPROPERTY(EditDefaultsOnly, Category=Effect)
-	class UParticleSystem* bulletEffectFactory;
+	class UNiagaraSystem* hitEffectFactory;
 
 
 

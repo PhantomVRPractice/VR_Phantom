@@ -24,6 +24,21 @@ UPlayerFire::UPlayerFire()
 	if (tempBullet.Succeeded()) {
 		bulletFactory = tempBullet.Class;
 	}
+
+	ConstructorHelpers::FObjectFinder<USoundBase> tempFireSound (TEXT("/Script/Engine.SoundWave'/Game/DKW/Sound/SW_semiautorifleshotwav.SW_semiautorifleshotwav'"));
+	if (tempFireSound.Succeeded()) {
+		fireSoundFactory = tempFireSound.Object;
+	}
+
+	ConstructorHelpers::FObjectFinder<USoundBase> tempEmptyFireSound(TEXT("/Script/Engine.SoundWave'/Game/DKW/Sound/SW_rifle-clip-empty-98832.SW_rifle-clip-empty-98832'"));
+	if (tempEmptyFireSound.Succeeded()) {
+		emptyFireSoundFactory = tempEmptyFireSound.Object;
+	}
+
+	ConstructorHelpers::FObjectFinder<UParticleSystem> tempFireEffect(TEXT("/Script/Engine.ParticleSystem'/Game/StarterContent/Particles/P_Explosion.P_Explosion'"));
+	if (tempFireEffect.Succeeded()) {
+		bulletEffectFactory = tempFireEffect.Object;
+	}
 }
 
 
@@ -36,7 +51,6 @@ void UPlayerFire::BeginPlay()
 	player = GetOwner<AVRPawn>();
 	
 }
-
 
 // Called every frame
 void UPlayerFire::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -80,17 +94,29 @@ void UPlayerFire::Fire()
 	FVector pos  = gun->GunComp->GetSocketLocation("FirePosition");
 	FRotator rot = gun->GunComp->GetSocketRotation("FirePosition");
 
-	// spawn
+	// spawn bullet
 	if (gun->GetAmmoCount() - 1 >= 0) {
 		gun->SetAmmoCount(gun->GetAmmoCount() - 1);
-		PRINT2SCREEN(TEXT("Remain Ammo=%d"),gun->GetAmmoCount());
-		
+
+
 		FActorSpawnParameters param;
 		param.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
 		GetWorld()->SpawnActor<ABullet>(bulletFactory, pos, rot, param);
+
+		if (fireSoundFactory) {
+			UGameplayStatics::PlaySound2D(GetWorld(), fireSoundFactory);
+		}
+		if (bulletEffectFactory) {
+			//UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), bulletEffectFactory, pos, rot);
+		}
+	}
+	else {
+		if (emptyFireSoundFactory) {
+			UGameplayStatics::PlaySound2D(GetWorld(), emptyFireSoundFactory);
+		}
 	}
 
-
+	PRINT2SCREEN(TEXT("Remain Ammo=%d"), gun->GetAmmoCount());
 }
 

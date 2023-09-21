@@ -7,6 +7,8 @@
 #include "../imitation_Phantom.h"
 #include "DKW/Enemy.h"
 #include "Kismet/GameplayStatics.h"
+#include "../Plugins/FX/Niagara/Source/Niagara/Classes/NiagaraSystem.h"
+#include "../Plugins/FX/Niagara/Source/Niagara/Public/NiagaraFunctionLibrary.h"
 
 // Sets default values
 ABullet::ABullet()
@@ -40,8 +42,17 @@ ABullet::ABullet()
 	movementComp->MaxSpeed = 10000;
 	movementComp->bShouldBounce = true;
 	movementComp->ProjectileGravityScale=0;
+
 	// life time
 	InitialLifeSpan = 2.0f;
+
+	// Effect 
+	static ConstructorHelpers::FObjectFinder<UNiagaraSystem> tempBulletEffect (TEXT("/Script/Niagara.NiagaraSystem'/Game/DKW/Effect/NS_BulletEffect.NS_BulletEffect'"));
+	if (tempBulletEffect.Succeeded()) {
+		hitEffectFactory = tempBulletEffect.Object;
+		GEngine->AddOnScreenDebugMessage(-1, 1, FColor::Yellow, FString::Printf(TEXT("blablablablablabl")), true, FVector2D(1, 1));
+	}
+
 }
 
 // Called when the game starts or when spawned
@@ -55,7 +66,6 @@ void ABullet::BeginPlay()
 void ABullet::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
 }
 
 void ABullet::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
@@ -68,13 +78,17 @@ void ABullet::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, 
 		PRINT2SCREEN(TEXT("Enemy Collided"));
 		enemy->OnDamage();
 	}
+
+	if (hitEffectFactory) {
+		FTransform trans;
+		/*trans.SetLocation(SweepResult.ImpactPoint);
+		trans.SetRotation(SweepResult.ImpactNormal.ToOrientationQuat());*/
+		PRINT2SCREEN(TEXT("hitEffectFactory is real"));
+		GEngine->AddOnScreenDebugMessage(-1, 1, FColor::Yellow, FString::Printf(TEXT("blablablablablabl")), true, FVector2D(1, 1));
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), hitEffectFactory, SweepResult.ImpactPoint);
+	}
+
 	Destroy();
 
-	if (bulletEffectFactory) {
-		FTransform trans;
-		trans.SetLocation(SweepResult.ImpactPoint);
-		trans.SetRotation(SweepResult.ImpactNormal.ToOrientationQuat());
-		UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), bulletEffectFactory, trans);
-	}
 }
 

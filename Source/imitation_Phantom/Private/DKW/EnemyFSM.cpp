@@ -55,10 +55,10 @@ void UEnemyFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 	}
 
 	// 현재 상태 출력
-	FString strState;
-	UEnum::GetValueAsString(mState, strState);
-	PRINT2SCREEN(TEXT("%s"), * strState);
-	PRINT2SCREEN(TEXT("hp : %d"), me->hp);
+	//FString strState;
+	//UEnum::GetValueAsString(mState, strState);
+	//PRINT2SCREEN(TEXT("%s"), * strState);
+	//PRINT2SCREEN(TEXT("hp : %d"), me->hp);
 
 
 	// FSM 목차

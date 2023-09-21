@@ -27,10 +27,17 @@ public:
 	// Input Setting
 	void SetupPlayerInputComponent(class UEnhancedInputComponent* enhancedInputComponent, TArray<class UInputAction*> inputActions);
 
-	UPROPERTY()
+	UPROPERTY(EditAnywhere, Category = "MyFactory")
 	TSubclassOf<class ABullet> bulletFactory;
-	UPROPERTY(EditAnywhere, Category = "bullet")
-	class USoundBase* fireSound;
+
+	UPROPERTY(EditAnywhere, Category = "MyFactory")
+	class USoundBase* fireSoundFactory;
+
+	UPROPERTY(EditAnywhere, Category = "MyFactory")
+	class USoundBase* emptyFireSoundFactory;
+
+	UPROPERTY(EditAnywhere, Category = "MyFactory")
+	class UParticleSystem* bulletEffectFactory;
 
 	UPROPERTY()
 	class AVRPawn* player;
