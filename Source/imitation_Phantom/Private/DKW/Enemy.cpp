@@ -67,13 +67,17 @@ void AEnemy::BeginPlay()
 	Super::BeginPlay();
 	
 	target = Cast<AVRPawn>(UGameplayStatics::GetActorOfClass(GetWorld(), AVRPawn::StaticClass()));
+	//pkm
+	CurRotator= GetActorRotation();
 }
 
 // Called every frame
 void AEnemy::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	//pkm
+	PreRotator=CurRotator;
+	CurRotator=GetActorRotation();
 }
 
 // Called to bind functionality to input
