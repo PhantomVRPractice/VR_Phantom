@@ -55,4 +55,13 @@ public:
 
 	void Fire();
 	void SearchPlayer();
+	
+
+	//PKM Write with Anim
+	UPROPERTY(BlueprintReadWrite)
+	bool turnfirsttick=true;
+	UPROPERTY(BlueprintReadWrite)
+	FRotator PreRotator;
+	UPROPERTY(BlueprintReadWrite)
+	FRotator CurRotator;
 };

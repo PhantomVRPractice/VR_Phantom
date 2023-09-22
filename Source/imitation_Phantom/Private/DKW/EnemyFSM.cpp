@@ -115,7 +115,7 @@ void UEnemyFSM::MoveState()
 {
 	if(!refPositions[curDestinationName])
 	{
-		PRINT2SCREEN(TEXT("No CurDestination Pos"));
+		//PRINT2SCREEN(TEXT("No CurDestination Pos"));
 		return;
 	}
 	FVector dest = refPositions[curDestinationName]->GetActorLocation();
@@ -127,6 +127,7 @@ void UEnemyFSM::MoveState()
 	// 타겟쪽으로이동할 수 있으면 거기로 간다
 	if (r.Result == ENavigationQueryResult::Success) {
 		isAlreadyGoal = ai->MoveToLocation(dest);
+		UE_LOG(LogTemp,Warning,TEXT("%f"),me->GetCharacterMovement()->Velocity.Length());
 	}
 
 	// 도착했다면 목표지점에 따라서 다르게 행동
@@ -148,7 +149,6 @@ void UEnemyFSM::SearchState()
 	// 탐색지역을 향해 몸을 돌린다
 	if (!isTurningFinished) {
 		//PRINT2SCREEN(TEXT("_Turning"));
-
 		FRotator curRot = me->GetActorRotation();
 		FRotator aimRot = refPositions[curDestinationName]->GetActorForwardVector().ToOrientationRotator();
 
@@ -168,7 +168,7 @@ void UEnemyFSM::SearchState()
 
 	// 찾는 모션을 한다
 	me->SearchPlayer();
-	anim->PlaySearchAnim("FindAnim");
+	//anim->PlaySearchAnim("FindAnim");
 	//PRINT2SCREEN(TEXT("_SearchingAnim"));
 
 	// 탐색시간동안 찾지 못한다면 돌아가는 모션
@@ -234,13 +234,13 @@ void UEnemyFSM::AttackState()
 		//PRINT_LOG(TEXT("Attack!!!!!!!!!!!!!"));
 
 		me->Fire();
-		anim->bAttackPlay = true;
+		//anim->bAttackPlay = true;
 	}
 
 	// Player 의 상태가 hidden 이라면 search 진행
 	if (!bIsFoundPlayer) {
 		mState = EEnemyState::Search;
-		anim->animState = mState;
+		//anim->animState = mState;
 	}
 
 }
@@ -253,7 +253,7 @@ void UEnemyFSM::DamageState()
 		//mState = EEnemyState::Idle;
 		ChangeEnemyStateToAttack();
 		currentTime = 0;
-		anim->animState = mState;
+		//anim->animState = mState;
 	}
 }
 
@@ -289,7 +289,7 @@ void UEnemyFSM::OnDamageProcess()
 		PRINT2SCREEN(TEXT("OnDamageProcess"));
 		me->hp--;
 		mState = EEnemyState::Damage;
-		anim->bDamage = true;
+		//anim->bDamage = true;
 		
 		// 피격 애니메이션몽타주 재생
 		//int32 index = FMath::RandRange(0, 1);s
@@ -305,7 +305,7 @@ void UEnemyFSM::OnDamageProcess()
 
 		//anim->PlayDamageAnim(TEXT("Die"));
 	}
-	anim->animState = mState;
+	//anim->animState = mState;
 	ai->StopMovement();
 }
 

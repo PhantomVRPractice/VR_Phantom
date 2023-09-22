@@ -3,12 +3,12 @@
 
 #include "DKW/EnemyAnim.h"
 
-void UEnemyAnim::OnAttackEndEvent()
-{
-	bAttackPlay = false;
-}
-
-void UEnemyAnim::AnimNotify_DieEndNoti()
-{
-	isDiePlaying = true;
-}
+//void UEnemyAnim::OnAttackEndEvent()
+//{
+//	bAttackPlay = false;
+//}
+//
+//void UEnemyAnim::AnimNotify_DieEndNoti()
+//{
+//	isDiePlaying = true;
+//}
