@@ -81,7 +81,7 @@ public:
 
 	
 	UPROPERTY(EditAnywhere, Category = "FSM")
-	float speed = 500;
+	float speed = 300;
 	// 나를 소유하고 있는 엑터
 	UPROPERTY()
 	class AEnemy* me;

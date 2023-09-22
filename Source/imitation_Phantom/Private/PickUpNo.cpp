@@ -53,32 +53,6 @@ void APickUpNo::Tick(float DeltaTime)
 			}
 			else {
 				PreVec=CurVec;
-				if (!bsoundplay)
-				{
-					bsoundplay=true;
-					CurVec = rightScene->GetComponentLocation();
-					float NoPower = (CurVec-PreVec).Size()/DeltaTime;
-					UE_LOG(LogTemp,Warning,TEXT("Power=%f"), NoPower);
-					//노 들어갈때 사운드 재생 (볼륨=파워)
-					UGameplayStatics::PlaySoundAtLocation(GetWorld(),NoSound,CurVec,NoPower/2000.0f);//아마 제일 쎄게 넣으면 2000 나올거임
-					// Curvec 에서부터 Debug원만들기(r=파워)
-					TArray<FOverlapResult> hitInfos;
-					FVector startLoc = CurVec;
-					float rad= NoPower*15;
-					if (GetWorld()->OverlapMultiByProfile(hitInfos, startLoc, FQuat::Identity, FName("NOSound"), FCollisionShape::MakeSphere(rad)))
-					{
-						UE_LOG(LogTemp, Warning, TEXT("hitInfo=%d"),hitInfos.Num());
-						for (const FOverlapResult& hitInfo : hitInfos)
-						{
-							if (AEnemy* hitEnemy = Cast<AEnemy>(hitInfo.GetActor()))
-							{
-								UE_LOG(LogTemp, Warning, TEXT("ChangeEnemy"));
-								hitEnemy->FSM->ChangeEnemyStateToAttack();
-							}
-						}
-					}
-					DrawDebugSphere(GetWorld(), startLoc, rad, 30, FColor::Green, false, 1.0f);	
-				}
 				if (bright)
 				{
 					//오른쪽으로 젓기
@@ -118,6 +92,31 @@ void APickUpNo::Tick(float DeltaTime)
 					double DotP = FVector::DotProduct(minusVec, player->boatMesh->GetRightVector());
 					player->pc->AddYawInput(-(VecPower / 30) * DotP);//-주기
 				}
+			}
+			if (!bsoundplay)
+			{
+				bsoundplay = true;
+				float NoPower = (CurVec - PreVec).Size() / DeltaTime;
+				UE_LOG(LogTemp, Warning, TEXT("Power=%f"), NoPower);
+				//노 들어갈때 사운드 재생 (볼륨=파워)
+				UGameplayStatics::PlaySoundAtLocation(GetWorld(), NoSound, CurVec, NoPower / 2000.0f);//아마 제일 쎄게 넣으면 2000 나올거임
+				// Curvec 에서부터 Debug원만들기(r=파워)
+				TArray<FOverlapResult> hitInfos;
+				FVector startLoc = CurVec;
+				float rad = NoPower/15;
+				if (GetWorld()->OverlapMultiByProfile(hitInfos, startLoc, FQuat::Identity, FName("NOSound"), FCollisionShape::MakeSphere(rad)))
+				{
+					UE_LOG(LogTemp, Warning, TEXT("hitInfo=%d"), hitInfos.Num());
+					for (const FOverlapResult& hitInfo : hitInfos)
+					{
+						if (AEnemy* hitEnemy = Cast<AEnemy>(hitInfo.GetActor()))
+						{
+							UE_LOG(LogTemp, Warning, TEXT("ChangeEnemy"));
+							hitEnemy->FSM->ChangeEnemyStateToAttack();
+						}
+					}
+				}
+				DrawDebugSphere(GetWorld(), startLoc, rad, 30, FColor::Green, false, 1.0f);
 			}
 		}
 	}

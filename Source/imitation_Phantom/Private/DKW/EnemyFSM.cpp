@@ -149,6 +149,7 @@ void UEnemyFSM::SearchState()
 	// 탐색지역을 향해 몸을 돌린다
 	if (!isTurningFinished) {
 		//PRINT2SCREEN(TEXT("_Turning"));
+		me->firsttick=true;
 		FRotator curRot = me->GetActorRotation();
 		FRotator aimRot = refPositions[curDestinationName]->GetActorForwardVector().ToOrientationRotator();
 
@@ -251,8 +252,10 @@ void UEnemyFSM::DamageState()
 	if (currentTime > damageDelayTime)
 	{
 		//mState = EEnemyState::Idle;
+		if(!bIsFoundPlayer)
 		ChangeEnemyStateToAttack();
-		currentTime = 0;
+		else
+		mState = EEnemyState::Attack;
 		//anim->animState = mState;
 	}
 }

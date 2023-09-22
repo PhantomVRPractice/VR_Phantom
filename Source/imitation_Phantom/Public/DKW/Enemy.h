@@ -50,7 +50,9 @@ public:
 	int32 initialHP = 5;
 	UPROPERTY(EditAnywhere, Category = "MySetting")
 	int32 hp = 5;
-	
+	bool firsttick=false;
+
+	bool secondtick = false;
 	void OnDamage();
 
 	void Fire();
