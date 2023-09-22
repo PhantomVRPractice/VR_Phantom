@@ -120,7 +120,7 @@ void AEnemy::Fire()
 void AEnemy::SearchPlayer()
 {
 	// HandLight의 앞방향 각도와 일정 각도 이하이면 
-	// HandLight의 플레이어 방향으로 ray를 쏜다
+	// HandLight의 플레이어 방향으로 ray 를 쏜다
 	// 플레이어가 맞았으면
 	// FSM의 isFoundPlayer = true
 	USceneComponent* handLight = Cast<USceneComponent>(GetDefaultSubobjectByName(TEXT("HandLight")));
