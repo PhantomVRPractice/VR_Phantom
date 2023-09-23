@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Pawn.h"
+#include "GameFramework/Pawn.h"
 #include "LobbyVRPawn.generated.h"
 
 /**
