@@ -33,7 +33,7 @@ public:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	class UEnemyFSM* FSM;
 
-	UPROPERTY(VisibleAnywhere, Category = "MySettings")
+	UPROPERTY(EditAnywhere, Category = "MySettings")
 	class USkeletalMeshComponent* gunMeshComp;
 
 	// ÃÑ¾Ë
