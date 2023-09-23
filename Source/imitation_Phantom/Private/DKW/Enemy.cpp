@@ -43,7 +43,7 @@ AEnemy::AEnemy()
 		//gunMeshComp->AttachToComponent(GetMesh(),  FAttachmentTransformRules::SnapToTargetNotIncludingScale, FName(TEXT("GunPosition")));
 		gunMeshComp->SetRelativeRotation(FRotator(180, 90, 0));
 	}
-
+	
 	// Bullet
 	ConstructorHelpers::FClassFinder<AEnemyBullet> TempBullet(TEXT("/Script/Engine.Blueprint'/Game/DKW/Enemy/Bp_EnemyBullet.BP_EnemyBullet_C'"));
 	
