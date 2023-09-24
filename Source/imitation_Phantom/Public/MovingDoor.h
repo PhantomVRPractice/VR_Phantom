@@ -29,6 +29,9 @@ public:
 	UPROPERTY(EditDefaultsOnly, Category="MySettings|Components")
 	class UStaticMeshComponent* meshComp;
 
+	UPROPERTY(EditAnywhere, Category="MySettings|Components")
+	class USceneComponent* SwitchScene;
+
 		UPROPERTY(EditDefaultsOnly, Category="MySettings|Components")
 	class UStaticMeshComponent* SwitchComp;
 	
@@ -40,6 +43,8 @@ public:
 	float Zdist=1000;
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="MySettings|dist")
 	float movingtime=10;
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="MySettings|dist")
+	float switchtime=1;
 	float curtime=0;
 	bool boverlap=false;
 };

@@ -12,9 +12,11 @@ AMovingDoor::AMovingDoor()
 	CapsuleComp = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapRoot"));
 	SetRootComponent(CapsuleComp);
 	meshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("DoorMesh"));
+	SwitchScene = CreateDefaultSubobject<USceneComponent>(TEXT("SwitchScene"));
 	SwitchComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SwitchMesh"));
 	meshComp->SetupAttachment(RootComponent);
-	SwitchComp->SetupAttachment(RootComponent);
+	SwitchScene->SetupAttachment(RootComponent);
+	SwitchComp->SetupAttachment(SwitchScene);
 }
 
 // Called when the game starts or when spawned
@@ -34,6 +36,10 @@ void AMovingDoor::Tick(float DeltaTime)
 	if (boverlap)
 	{
 		curtime+=DeltaTime;
+		if (curtime<switchtime)
+		{
+			SwitchScene->SetRelativeRotation(FRotator(0,0,70*curtime/switchtime));
+		}
 		if (curtime<movingtime)
 		{ 
 			FVector NewLoc = Startloc;
