@@ -22,6 +22,10 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	UPROPERTY(EditDefaultsOnly, Category="MySettings|Components")
+	class UCapsuleComponent* CapsuleComp;
+
 	UPROPERTY(EditDefaultsOnly, Category="MySettings|Components")
 	class UStaticMeshComponent* meshComp;
 
