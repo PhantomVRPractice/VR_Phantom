@@ -2,16 +2,19 @@
 
 
 #include "MovingDoor.h"
+#include <Components/CapsuleComponent.h>
 
 // Sets default values
 AMovingDoor::AMovingDoor()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
+	CapsuleComp = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapRoot"));
+	SetRootComponent(CapsuleComp);
 	meshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("DoorMesh"));
 	SwitchComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("SwitchMesh"));
 	meshComp->SetupAttachment(RootComponent);
-	SwitchComp->SetupAttachment(meshComp);
+	SwitchComp->SetupAttachment(RootComponent);
 }
 
 // Called when the game starts or when spawned
@@ -19,7 +22,7 @@ void AMovingDoor::BeginPlay()
 {
 	Super::BeginPlay();
 	SwitchComp->OnComponentBeginOverlap.AddDynamic(this, &AMovingDoor::OnOverlapBegin);
-	Startloc=GetActorLocation();
+	Startloc=meshComp->GetRelativeLocation();
 	Endloc=Startloc;
 	Endloc.Z+=Zdist;
 }
@@ -35,11 +38,11 @@ void AMovingDoor::Tick(float DeltaTime)
 		{ 
 			FVector NewLoc = Startloc;
 			NewLoc.Z += curtime * (Zdist / movingtime);
-			SetActorLocation(NewLoc);
+			meshComp->SetRelativeLocation(NewLoc);
 		}
 		else
 		{
-			SetActorLocation(Endloc);
+			meshComp->SetRelativeLocation(Endloc);
 			boverlap=false;
 			curtime=0;
 		}
