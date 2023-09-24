@@ -32,9 +32,9 @@ public:
 	void OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AActor* OtherActor, class UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 	FVector Startloc;
 	FVector Endloc;
-	UPROPERTY(BlueprintReadWrite, Category="MySettings|dist")
+	UPROPERTY(EditAnyWhere, BlueprintReadWrite, Category="MySettings|dist")
 	float Zdist=1000;
-	UPROPERTY(BlueprintReadWrite, Category="MySettings|dist")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="MySettings|dist")
 	float movingtime=10;
 	float curtime=0;
 	bool boverlap=false;
