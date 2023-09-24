@@ -103,7 +103,7 @@ void APickUpNo::Tick(float DeltaTime)
 				// Curvec 에서부터 Debug원만들기(r=파워)
 				TArray<FOverlapResult> hitInfos;
 				FVector startLoc = CurVec;
-				float rad = NoPower/15;
+				float rad = NoPower/100;
 				if (GetWorld()->OverlapMultiByProfile(hitInfos, startLoc, FQuat::Identity, FName("NOSound"), FCollisionShape::MakeSphere(rad)))
 				{
 					UE_LOG(LogTemp, Warning, TEXT("hitInfo=%d"), hitInfos.Num());
