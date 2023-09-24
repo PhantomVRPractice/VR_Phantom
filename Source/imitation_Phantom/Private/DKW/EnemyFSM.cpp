@@ -55,10 +55,10 @@ void UEnemyFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 	}
 
 	// 현재 상태 출력
-	//FString strState;
-	//UEnum::GetValueAsString(mState, strState);
-	//PRINT2SCREEN(TEXT("%s"), * strState);
-	//PRINT2SCREEN(TEXT("hp : %d"), me->hp);
+	FString strState;
+	UEnum::GetValueAsString(mState, strState);
+	PRINT2SCREEN(TEXT("%s"), *strState);
+	PRINT2SCREEN(TEXT("hp : %d"), me->hp);
 
 
 	// FSM 목차
@@ -129,9 +129,11 @@ void UEnemyFSM::MoveState()
 		isAlreadyGoal = ai->MoveToLocation(dest);
 		UE_LOG(LogTemp,Warning,TEXT("%f"),me->GetCharacterMovement()->Velocity.Length());
 	}
+	PRINT2SCREEN(TEXT("dst : %f"), FVector::Dist(me->GetActorLocation(), dest));
 
 	// 도착했다면 목표지점에 따라서 다르게 행동
-	if (isAlreadyGoal == EPathFollowingRequestResult::AlreadyAtGoal) {
+	//if (isAlreadyGoal == EPathFollowingRequestResult::AlreadyAtGoal) {
+	if(FVector::Dist(me->GetActorLocation(), dest)< 100.0f ){
 		if (curDestinationName.Contains("SearchPos")) {
 			mState = EEnemyState::Search;
 		}
