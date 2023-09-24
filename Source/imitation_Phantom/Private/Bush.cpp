@@ -5,7 +5,7 @@
 #include "VRPawn.h"
 #include "ExposedUI.h"
 #include <UMG/Public/Components/TextBlock.h>
-
+#include <Kismet/GameplayStatics.h>
 // Sets default values
 ABush::ABush()
 {
@@ -37,6 +37,10 @@ void ABush::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AAct
 	{
 		player->bhide=true;
 		UE_LOG(LogTemp,Warning,TEXT("player hide"));
+		if (BushSoundFactory != nullptr)
+		{
+			UGameplayStatics::PlaySoundAtLocation(GetWorld(), BushSoundFactory, player->GetActorLocation());
+		}
 		if (!player->bexposed)
 		{
 			player->ExposeUI->screenText->SetText(FText::FromString(FString(TEXT("Hidden"))));
@@ -52,6 +56,10 @@ void ABush::OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor
 	{
 		player->bhide = false;
 		UE_LOG(LogTemp, Warning, TEXT("player open"));
+		if (BushSoundFactory != nullptr)
+		{
+			UGameplayStatics::PlaySoundAtLocation(GetWorld(), OutSoundFactory, player->GetActorLocation());
+		}
 		if (!player->bexposed)
 		{
 			player->ExposeUI->screenText->SetText(FText::FromString(FString(TEXT("Exposed"))));

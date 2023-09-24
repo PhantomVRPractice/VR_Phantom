@@ -54,7 +54,13 @@ public:
 
 	bool secondtick = false;
 	void OnDamage();
+	UPROPERTY(EditAnywhere)
+	float lenght=2000;
 
+	UPROPERTY(EditAnywhere)
+	bool bdebuglenght = false;
+
+	float debugtime=0;
 	void Fire();
 	void SearchPlayer();
 	

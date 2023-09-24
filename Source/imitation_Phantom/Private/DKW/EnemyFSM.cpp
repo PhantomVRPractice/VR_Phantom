@@ -12,6 +12,7 @@
 #include "../imitation_Phantom.h"
 #include <GameFramework/CharacterMovementComponent.h>
 #include <Kismet/KismetMathLibrary.h>
+#include <Kismet/GameplayStatics.h>
 #include "VRPawn.h"
 
 // Sets default values for this component's properties
@@ -237,6 +238,10 @@ void UEnemyFSM::AttackState()
 		//PRINT_LOG(TEXT("Attack!!!!!!!!!!!!!"));
 
 		me->Fire();
+		if (fireSoundFactory!=nullptr)
+		{
+			UGameplayStatics::PlaySoundAtLocation(GetWorld(), fireSoundFactory, me->GetActorLocation());
+		}
 		//anim->bAttackPlay = true;
 	}
 

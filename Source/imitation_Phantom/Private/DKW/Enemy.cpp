@@ -93,6 +93,15 @@ void AEnemy::Tick(float DeltaTime)
 	firsttick=false;
 	secondtick=true;
 	}
+	if (bdebuglenght)
+	{
+		debugtime+=DeltaTime;
+		if (debugtime>1)
+		{
+			debugtime=0;
+			DrawDebugSphere(GetWorld(), GetActorLocation(), lenght, 30, FColor::Green, false, 1.0f);
+		}
+	}
 	
 }
 
@@ -163,7 +172,7 @@ void AEnemy::SearchPlayer()
 	
 	// юс╫ц
 	//PRINT2SCREEN(TEXT("%f"), (target->GetActorLocation() - GetActorLocation()).Size());
-	if (!target->bhide&&(target->GetActorLocation()-GetActorLocation()).Size()<=4000)
+	if (!target->bhide&&(target->GetActorLocation()-GetActorLocation()).Size()<=lenght)
 	{
 		FSM->bIsFoundPlayer = true;
 	}

@@ -105,6 +105,9 @@ public:
 	UPROPERTY(EditAnywhere, Category= "FSM")
 	float dieDelayTime = 5;
 
+	UPROPERTY(EditAnywhere, Category = "MyFactory")
+	class USoundBase* fireSoundFactory;
+
 public:	// Animation
 	UPROPERTY()
 	class UEnemyAnim* anim;
