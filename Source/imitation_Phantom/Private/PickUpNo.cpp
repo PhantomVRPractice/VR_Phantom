@@ -116,7 +116,7 @@ void APickUpNo::Tick(float DeltaTime)
 						}
 					}
 				}
-				DrawDebugSphere(GetWorld(), startLoc, rad, 30, FColor::Green, false, 1.0f);
+				//DrawDebugSphere(GetWorld(), startLoc, rad, 30, FColor::Green, false, 1.0f);
 			}
 		}
 	}
