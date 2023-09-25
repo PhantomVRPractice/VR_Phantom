@@ -76,7 +76,7 @@ void UPlayerFire::SetupPlayerInputComponent(class UEnhancedInputComponent* enhan
 
 void UPlayerFire::Fire()
 {
-	PRINT2SCREEN(TEXT("Player Fire !!"));
+	//PRINT2SCREEN(TEXT("Player Fire !!"));
 	// 총을 가지고 있지 않으면 
 	if(!player->bIsGunMode) return;
 	
@@ -85,9 +85,9 @@ void UPlayerFire::Fire()
 	gun = Cast<APickUpMyGun>(UGameplayStatics::GetActorOfClass(GetWorld(), APickUpMyGun::StaticClass()));
 	
 	if (!gun) {
-		PRINT2SCREEN(TEXT("No Gun Here !!"));
+		//PRINT2SCREEN(TEXT("No Gun Here !!"));
 	}
-	PRINT2SCREEN(TEXT("Spawn Spawn !!"));
+	//PRINT2SCREEN(TEXT("Spawn Spawn !!"));
 
 	// gun skeletal transform
 	// 소켓확인하기
@@ -117,6 +117,6 @@ void UPlayerFire::Fire()
 		}
 	}
 
-	PRINT2SCREEN(TEXT("Remain Ammo=%d"), gun->GetAmmoCount());
+	//PRINT2SCREEN(TEXT("Remain Ammo=%d"), gun->GetAmmoCount());
 }
 

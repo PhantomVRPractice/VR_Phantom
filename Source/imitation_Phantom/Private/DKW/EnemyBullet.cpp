@@ -59,12 +59,12 @@ void AEnemyBullet::Tick(float DeltaTime)
 
 void AEnemyBullet::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	PRINT2SCREEN(TEXT("Bullet Collided"));
+	//PRINT2SCREEN(TEXT("Bullet Collided"));
 
 	AVRPawn* player = Cast<AVRPawn>(OtherActor);
 
 	if (player) {
-		PRINT2SCREEN(TEXT("Player Collided"));
+		//PRINT2SCREEN(TEXT("Player Collided"));
 		//enemy->OnDamage();
 		player->Damaged(1);
 	}
