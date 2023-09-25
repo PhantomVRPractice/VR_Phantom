@@ -69,12 +69,12 @@ void ABullet::Tick(float DeltaTime)
 
 void ABullet::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	PRINT2SCREEN(TEXT("Bullet Collided"));
+	//PRINT2SCREEN(TEXT("Bullet Collided"));
 
 	AEnemy* enemy = Cast<AEnemy>(OtherActor);
 
 	if (enemy) {
-		PRINT2SCREEN(TEXT("Enemy Collided"));
+		//PRINT2SCREEN(TEXT("Enemy Collided"));
 		enemy->OnDamage();
 	}
 
@@ -82,7 +82,7 @@ void ABullet::OnComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, 
 		FTransform trans;
 		/*trans.SetLocation(SweepResult.ImpactPoint);
 		trans.SetRotation(SweepResult.ImpactNormal.ToOrientationQuat());*/
-		PRINT2SCREEN(TEXT("hitEffectFactory is real"));
+		//PRINT2SCREEN(TEXT("hitEffectFactory is real"));
 		GEngine->AddOnScreenDebugMessage(-1, 1, FColor::Yellow, FString::Printf(TEXT("blablablablablabl")), true, FVector2D(1, 1));
 		UNiagaraFunctionLibrary::SpawnSystemAtLocation(GetWorld(), hitEffectFactory, SweepResult.ImpactPoint);
 	}

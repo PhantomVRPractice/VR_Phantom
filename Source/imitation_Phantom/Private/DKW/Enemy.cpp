@@ -118,7 +118,7 @@ void AEnemy::OnDamage()
 #pragma region old
 	//if (hp > 0) {
 	//	hp--;
-	//	//PRINT2SCREEN(TEXT("Enemy Damage : %d"), hp);
+	//	////PRINT2SCREEN(TEXT("Enemy Damage : %d"), hp);
 	//}
 	//else {
 	//	// animation 
@@ -154,11 +154,11 @@ void AEnemy::SearchPlayer()
 	USceneComponent* handLight = Cast<USceneComponent>(GetDefaultSubobjectByName(TEXT("HandLight")));
 	
 	if(!target){ 
-		//PRINT2SCREEN(TEXT("noTarget"));
+		////PRINT2SCREEN(TEXT("noTarget"));
 		return; 
 	}
 	if(!handLight){
-		//PRINT2SCREEN(TEXT("noHandLight"));
+		////PRINT2SCREEN(TEXT("noHandLight"));
 		return;
 	} 
 	FVector A = handLight->GetForwardVector();
@@ -168,10 +168,10 @@ void AEnemy::SearchPlayer()
 	float AngleRadians = FMath::Acos(AngleCosine);
 	float degreeOfPlayer = FMath::RadiansToDegrees(AngleRadians);
 
-	//PRINT2SCREEN(TEXT("PlayerDegree : %f"), degreeOfPlayer);
+	////PRINT2SCREEN(TEXT("PlayerDegree : %f"), degreeOfPlayer);
 	
 	// юс╫ц
-	//PRINT2SCREEN(TEXT("%f"), (target->GetActorLocation() - GetActorLocation()).Size());
+	////PRINT2SCREEN(TEXT("%f"), (target->GetActorLocation() - GetActorLocation()).Size());
 	if (!target->bhide&&(target->GetActorLocation()-GetActorLocation()).Size()<=lenght)
 	{
 		FSM->bIsFoundPlayer = true;
@@ -194,7 +194,7 @@ void AEnemy::SearchPlayer()
 		//bool bhit = GetWorld()->LineTraceSingleByChannel(hitInfo, startPos, endPos, ECC_Visibility, params);
 
 		//if (bhit && hitInfo.GetActor() == target) {
-		//	PRINT2SCREEN(TEXT("RayHitPlayer"));
+		//	//PRINT2SCREEN(TEXT("RayHitPlayer"));
 		//	FSM->bIsFoundPlayer = true;
 		//}
 

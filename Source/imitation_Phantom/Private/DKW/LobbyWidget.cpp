@@ -13,5 +13,5 @@ void ULobbyWidget::NativeConstruct()
 
 void ULobbyWidget::ChangeToMainMap()
 {
-	PRINT2SCREEN(TEXT("Change to map"));
+	//PRINT2SCREEN(TEXT("Change to map"));
 }
