@@ -58,8 +58,8 @@ void UEnemyFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 	// 현재 상태 출력
 	FString strState;
 	UEnum::GetValueAsString(mState, strState);
-	PRINT2SCREEN(TEXT("%s"), *strState);
-	PRINT2SCREEN(TEXT("hp : %d"), me->hp);
+	//PRINT2SCREEN(TEXT("%s"), *strState);
+	//PRINT2SCREEN(TEXT("hp : %d"), me->hp);
 
 
 	// FSM 목차
@@ -128,9 +128,9 @@ void UEnemyFSM::MoveState()
 	// 타겟쪽으로이동할 수 있으면 거기로 간다
 	if (r.Result == ENavigationQueryResult::Success) {
 		isAlreadyGoal = ai->MoveToLocation(dest);
-		UE_LOG(LogTemp,Warning,TEXT("%f"),me->GetCharacterMovement()->Velocity.Length());
+		//UE_LOG(LogTemp,Warning,TEXT("%f"),me->GetCharacterMovement()->Velocity.Length());
 	}
-	PRINT2SCREEN(TEXT("dst : %f"), FVector::Dist(me->GetActorLocation(), dest));
+	//PRINT2SCREEN(TEXT("dst : %f"), FVector::Dist(me->GetActorLocation(), dest));
 
 	// 도착했다면 목표지점에 따라서 다르게 행동
 	//if (isAlreadyGoal == EPathFollowingRequestResult::AlreadyAtGoal) {
@@ -296,7 +296,7 @@ void UEnemyFSM::OnDamageProcess()
 	// 체력이 0 이상이면
 	if (me->hp > 1)
 	{
-		PRINT2SCREEN(TEXT("OnDamageProcess"));
+		//PRINT2SCREEN(TEXT("OnDamageProcess"));
 		me->hp--;
 		mState = EEnemyState::Damage;
 		//anim->bDamage = true;

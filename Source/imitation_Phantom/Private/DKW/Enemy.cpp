@@ -93,7 +93,7 @@ void AEnemy::Tick(float DeltaTime)
 	firsttick=false;
 	secondtick=true;
 	}
-	if (bdebuglenght)
+	/*if (bdebuglenght)
 	{
 		debugtime+=DeltaTime;
 		if (debugtime>1)
@@ -101,7 +101,7 @@ void AEnemy::Tick(float DeltaTime)
 			debugtime=0;
 			DrawDebugSphere(GetWorld(), GetActorLocation(), lenght, 30, FColor::Green, false, 1.0f);
 		}
-	}
+	}*/
 	
 }
 
@@ -154,11 +154,11 @@ void AEnemy::SearchPlayer()
 	USceneComponent* handLight = Cast<USceneComponent>(GetDefaultSubobjectByName(TEXT("HandLight")));
 	
 	if(!target){ 
-		PRINT2SCREEN(TEXT("noTarget"));
+		//PRINT2SCREEN(TEXT("noTarget"));
 		return; 
 	}
 	if(!handLight){
-		PRINT2SCREEN(TEXT("noHandLight"));
+		//PRINT2SCREEN(TEXT("noHandLight"));
 		return;
 	} 
 	FVector A = handLight->GetForwardVector();
