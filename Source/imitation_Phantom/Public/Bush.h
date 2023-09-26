@@ -24,8 +24,14 @@ public:
 	virtual void Tick(float DeltaTime) override;
 	UPROPERTY(EditAnywhere, Category="MySettings|Components")
 	class UStaticMeshComponent* bushMesh;
+	UPROPERTY(EditAnywhere, Category="MySettings|Components")
+	class UStaticMeshComponent* bushSMesh;
 	UPROPERTY(EditAnywhere, Category = "MyFactory")
 	class USoundBase* BushSoundFactory;
+	UPROPERTY(EditAnywhere, Category = "MyFactory")
+	class UMaterialInterface* VisibleMat;
+	UPROPERTY(EditAnywhere, Category = "MyFactory")
+	class UMaterialInterface* InVisibleMat;
 	UPROPERTY(EditAnywhere, Category = "MyFactory")
 	class USoundBase* OutSoundFactory;
 	UFUNCTION()

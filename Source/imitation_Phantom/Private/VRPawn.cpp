@@ -24,6 +24,7 @@
 #include <UMG/Public/Components/WidgetComponent.h>
 #include "ExposedUI.h"
 #include <UMG/Public/Components/TextBlock.h>
+#include "DirArrow.h"
 // Sets default values
 AVRPawn::AVRPawn()
 {
@@ -84,6 +85,10 @@ AVRPawn::AVRPawn()
 	GunScene->SetupAttachment(boatMesh);
 	MyAmmoScene = CreateDefaultSubobject<USceneComponent>(TEXT("MyAmmo Scene"));
 	MyAmmoScene->SetupAttachment(boatMesh);
+
+	MyArrowScene = CreateDefaultSubobject<USceneComponent>(TEXT("MyArrow 1Scene"));
+	MyArrowScene->SetupAttachment(boatMesh);
+
 	MyWidget=CreateDefaultSubobject<UWidgetComponent>(TEXT("MyScreenWidget"));
 	MyWidget->SetupAttachment(boatMesh);
 	
@@ -134,14 +139,36 @@ void AVRPawn::BeginPlay()
 		}
 		
 	}
+	DirArrow = GetWorld()->SpawnActor<ADirArrow>(DirArrowActor);
+	if (DirArrow != nullptr)
+	{
+		DirArrow->AttachToComponent(MyArrowScene, FAttachmentTransformRules::SnapToTargetNotIncludingScale);
+	}
 	ExposeUI=Cast<UExposedUI>(MyWidget->GetUserWidgetObject());
+	Targetloc=DirlocArr[dirlocidx];
+	
 }
 
 // Called every frame
 void AVRPawn::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
-
+	if (DirArrow!=nullptr)
+	{
+		FVector FixArrowVec=Targetloc-DirArrow->GetActorLocation();
+		FixArrowVec.Z=0;
+		DirArrow->SetActorRotation(FixArrowVec.Rotation());
+		
+		if (FixArrowVec.Length()<1000)
+		{
+			//만약 targetloc과 거리가 1000이하면 다음 지점으로 targetloc 바꾸기;
+			if (dirlocidx+1<DirlocArr.Num())
+			{
+				dirlocidx += 1;
+				Targetloc=DirlocArr[dirlocidx];
+			}
+		}
+	}
 }
 
 // Called to bind functionality to input

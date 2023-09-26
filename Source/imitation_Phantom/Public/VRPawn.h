@@ -38,6 +38,9 @@ public:
 	class USceneComponent* MyAmmoScene;
 
 	UPROPERTY(EditAnywhere, Category="MySettings|Components")
+	class USceneComponent* MyArrowScene;
+
+	UPROPERTY(EditAnywhere, Category="MySettings|Components")
 	class UCameraComponent* hmdCam;
 
 	UPROPERTY(EditAnywhere, Category="MySettings|Components")
@@ -106,6 +109,9 @@ public:
 	TSubclassOf<class APickUpAmmo> AmmoActor;
 
 	UPROPERTY(EditDefaultsOnly, Category = "MySettings|Components")
+	TSubclassOf<class ADirArrow> DirArrowActor;
+
+	UPROPERTY(EditDefaultsOnly, Category = "MySettings|Components")
 	int32 hp=10;
 
 	UPROPERTY(EditDefaultsOnly, Category = "MySettings|Hide")
@@ -137,6 +143,15 @@ public:
 
 	UPROPERTY(EditDefaultsOnly, Category = "MySettings|Screen")
 	class UExposedUI* ExposeUI;
+	UPROPERTY()
+	ADirArrow* DirArrow;
 
+	UPROPERTY()
+	TArray<FVector> DirlocArr= {FVector(-8200.0, 370, 4040),FVector(-8750.0, 3120, 4040),FVector(-7050.0, 4370, 4040),FVector(-2230.0, 3650, 4040),FVector(770.0, 3320, 4040),FVector(2580.0, 1720, 4040),FVector(6920.0, 1870, 4040) };
+	
+	UPROPERTY()
+	FVector Targetloc= FVector(0, 0, 0);
 
+	UPROPERTY()
+	int32 dirlocidx=0;
 };

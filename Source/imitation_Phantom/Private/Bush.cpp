@@ -6,13 +6,16 @@
 #include "ExposedUI.h"
 #include <UMG/Public/Components/TextBlock.h>
 #include <Kismet/GameplayStatics.h>
+#include "Materials/Material.h"
 // Sets default values
 ABush::ABush()
 {
  	// Set this actor to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
-	bushMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Boat Mesh"));
-	RootComponent = bushMesh;
+	bushMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Sphere Mesh"));
+	bushMesh->SetupAttachment(RootComponent);
+	bushSMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("Bush SSMesh"));
+	bushSMesh->SetupAttachment(bushMesh);
 }
 
 // Called when the game starts or when spawned
@@ -36,6 +39,11 @@ void ABush::OnOverlapBegin(class UPrimitiveComponent* OverlappedComp, class AAct
 	if (player!=nullptr)
 	{
 		player->bhide=true;
+		if (InVisibleMat!=nullptr)
+		{
+			bushSMesh->SetMaterial(0, InVisibleMat);
+		}
+		
 		UE_LOG(LogTemp,Warning,TEXT("player hide"));
 		if (BushSoundFactory != nullptr)
 		{
@@ -55,6 +63,10 @@ void ABush::OnOverlapEnd(class UPrimitiveComponent* OverlappedComp, class AActor
 	if (player != nullptr)
 	{
 		player->bhide = false;
+		if (VisibleMat != nullptr)
+		{
+			bushSMesh->SetMaterial(0, VisibleMat);
+		}
 		UE_LOG(LogTemp, Warning, TEXT("player open"));
 		if (BushSoundFactory != nullptr)
 		{
