@@ -91,6 +91,10 @@ public:
 	UPROPERTY(EditAnywhere, Category="FSM")
 	float attackRange = 206;
 
+	// 필요속성 : 공동발견범위 
+	UPROPERTY(EditAnywhere, Category="FSM")
+	float coFoundPlayerRange = 1000;
+
 	// 공격범위 시각화여부
 	UPROPERTY(EditAnywhere, Category="FSM")
 	bool bDebugAttackRange = false;

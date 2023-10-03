@@ -14,6 +14,7 @@
 #include <Kismet/KismetMathLibrary.h>
 #include <Kismet/GameplayStatics.h>
 #include "VRPawn.h"
+#include "GameFramework/Actor.h"
 
 // Sets default values for this component's properties
 UEnemyFSM::UEnemyFSM()
@@ -54,12 +55,20 @@ void UEnemyFSM::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 	if (bDebugAttackRange) {
 		DrawDebugSphere(GetWorld(), me->GetActorLocation(), attackRange, 20, FColor::Red, false, -1, 0, 2);
 	}
+	// 공동발견 범위 시각화 
+	if (bDebugAttackRange) {
+		DrawDebugSphere(GetWorld(), me->GetActorLocation(), coFoundPlayerRange, 20, FColor::Yellow, false, -1, 0, 2);
+	}
 
 	// 현재 상태 출력
-	FString strState;
-	UEnum::GetValueAsString(mState, strState);
-	////PRINT2SCREEN(TEXT("%s"), *strState);
-	////PRINT2SCREEN(TEXT("hp : %d"), me->hp);
+#pragma region curState
+	// FString strState;
+	// UEnum::GetValueAsString(mState, strState);
+	// PRINT2SCREEN(TEXT("%s"), *strState);
+	// PRINT2SCREEN(TEXT("hp : %d"), me->hp);
+#pragma endregion
+
+
 
 
 	// FSM 목차
@@ -352,5 +361,14 @@ void UEnemyFSM::ChangeEnemyStateToAttack()
 	bIsFoundPlayer = true;
 	target->Exposed();
 	mState = EEnemyState::Attack;
+
+
+	// 주변 1000 반경 내 애너미의 상태가 공격일 때
+	TArray<AActor*> enemys;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), AEnemy::StaticClass(), enemys);
+	for (AActor* enemy : enemys) {
+		float dst = FVector::Distance(enemy->GetActorLocation(), me->GetActorLocation());
+		if (dst < coFoundPlayerRange) { Cast<AEnemy>(enemy)->FSM->ChangeEnemyStateToAttack(); }
+	}
 }
 
