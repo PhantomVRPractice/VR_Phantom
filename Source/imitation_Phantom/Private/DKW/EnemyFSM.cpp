@@ -357,7 +357,6 @@ void UEnemyFSM::ChangeEnemyStateToAttack()
 	if(mState== EEnemyState::Attack)
 	return;
 	
-
 	bIsFoundPlayer = true;
 	target->Exposed();
 	mState = EEnemyState::Attack;

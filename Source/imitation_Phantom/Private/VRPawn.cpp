@@ -103,7 +103,6 @@ void AVRPawn::BeginPlay()
 
 	// 머리 장비 기준점 설정
 	UHeadMountedDisplayFunctionLibrary::SetTrackingOrigin(EHMDTrackingOrigin::Stage);
-
 	pc = GetController<APlayerController>();
 
 	if (pc != nullptr)
